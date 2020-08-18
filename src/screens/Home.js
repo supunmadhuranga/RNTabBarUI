@@ -7,11 +7,13 @@ import {
     Image,
     ScrollView,
     FlatList,
+    TouchableOpacity,
 } from 'react-native';
 import Sizes from '../styles/sizes';
 import Colors from '../styles/colors';
 import Fonts from '../styles/fonts';
 import Carousel from '../components/snap-carousel';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import board1 from '../../assets/coming.png';
 import board2 from '../../assets/nointernet.png';
@@ -59,6 +61,40 @@ export default class Home extends React.Component {
         };
     }
 
+    // navigation header bar
+    static navigationOptions = ({ navigation }) => {
+        //headerTransparent: true,
+
+        return {
+            headerTitle: 'Explore',
+            //headerLeft: () => ( <HeaderBackButton tintColor="#fff" onPress={() => navigation.goBack()} /> ),
+            headerRight: () => ( 
+                <View style={{flex:1, justifyContent:'center', height:Sizes.wp('5%'), width:Sizes.wp('10%'), marginRight:Sizes.wp('0%')}}>
+                    <TouchableOpacity 
+                        //onPress={() => this.followFunction()}
+                        style={{backgroundColor:'yellow', height:Sizes.wp('10%'), width:Sizes.wp('10%'), justifyContent: 'center', alignItems:'center', borderRadius:Sizes.wp('10%')/2 }}>
+                        <Icon name='search' size={Sizes.wp('5%')} color={Colors.black} />
+                    </TouchableOpacity>
+                </View>
+            ),
+            
+            headerStyle: {
+                backgroundColor:Colors.white,
+                elevation: 0,
+                shadowOpacity: 0,
+            },
+            headerTitleStyle: {
+                //flex: 1,
+                //textAlign: 'center',
+                fontSize:Sizes.wp('6%'),
+                fontFamily:Fonts.mainBold,
+                fontWeight: '200',
+                //width:Sizes.wp('60%'),
+            }
+            //headerTintColor: "#fff",  
+        };  
+    };
+
     _renderItem = ({item, index}) => {
         return (
             <View style={{height:Sizes.wp('40%'), width:Sizes.wp('30%'), marginLeft:Sizes.wp('4%') }}>
@@ -87,12 +123,12 @@ export default class Home extends React.Component {
 
     render() {
         return (
-            <View style={{flex:1, backgroundColor:Colors.white, marginTop:Sizes.wp('3%'), marginBottom:Sizes.wp('3%')}}>
+            <View style={{flex:1, backgroundColor:Colors.white}}>
                 
                 <View style={{flex:1, justifyContent:'space-between'}}>
-                    <View style={{marginLeft:Sizes.wp('4%'), marginRight:Sizes.wp('4%'), marginTop:Sizes.wp('4%'), marginBottom:Sizes.wp('3%')}}>
+                    {/* <View style={{marginLeft:Sizes.wp('4%'), marginRight:Sizes.wp('4%'), marginTop:Sizes.wp('4%'), marginBottom:Sizes.wp('3%')}}>
                         <Text style={{fontFamily:Fonts.mainBold, fontSize:Sizes.wp('6%')}}>Explore</Text>
-                    </View>
+                    </View> */}
 
                     <View>
                         <View style={{marginLeft:Sizes.wp('4%'), marginRight:Sizes.wp('4%'), marginTop:Sizes.wp('4%'), marginBottom:Sizes.wp('2%')}}>

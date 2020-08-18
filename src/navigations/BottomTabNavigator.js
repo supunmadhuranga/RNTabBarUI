@@ -14,21 +14,23 @@ import HomeScreen from '../screens/Home';
 import MapScreen from '../screens/Map';
 import UserScreen from '../screens/User';
 
+const ScreenHome = createStackNavigator ({
+    screen: HomeScreen,
+});
+
+const ScreenMap = createStackNavigator ({
+    screen: MapScreen,
+});
+
 const ScreenUser = createStackNavigator ({
     screen: UserScreen,
-    // User: {
-        
-    //     // navigationOptions: {
-    //     //     title: "fuck",
-    //     // }
-    // }
 });
 
 
 const bottomTabNavigator = createBottomTabNavigator(
     {   
         Home: {
-            screen: HomeScreen,
+            screen: ScreenHome,
             navigationOptions: {
                 tabBarIcon: ({ tintColor }) => (
                     <Entypo name="home" size={wp('5%')} color={tintColor} />
@@ -36,7 +38,7 @@ const bottomTabNavigator = createBottomTabNavigator(
             }
         },
         Map: {
-            screen: MapScreen,
+            screen: ScreenMap,
             navigationOptions: {
                 tabBarIcon: ({ tintColor }) => (
                     <MaterialCommunityIcons name="map-marker" size={wp('5%')} color={tintColor} />
