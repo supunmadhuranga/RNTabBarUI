@@ -5,6 +5,7 @@ import {
     Image,
     StyleSheet,
     TouchableOpacity,
+    ScrollView,
 } from 'react-native';
 import Animated from 'react-native-reanimated';
 import Sizes from '../styles/sizes';
@@ -13,16 +14,102 @@ import Fonts from '../styles/fonts';
 
 import { TabView, SceneMap } from 'react-native-tab-view';
 import Feather from 'react-native-vector-icons/Feather';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 import board1 from '../../assets/coming.png';
 import { Button } from 'react-native-paper';
 
 const FirstRoute = () => (
-    <View style={[{ flex:1, backgroundColor: '#ff4081' }]} />
+    <ScrollView showsVerticalScrollIndicator={false} style={[{ flex:1, backgroundColor: '#ff4081' }]}>
+        
+        {/* first row */}
+        <View style={{flexDirection:'row', flexWrap: 'wrap', marginLeft:Sizes.wp('3%'), marginRight:Sizes.wp('3%'), marginBottom:Sizes.wp('4%'), justifyContent:'space-between'}}>
+            <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                
+            </View>
+
+            <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                
+            </View>
+
+            <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                
+            </View>
+            
+        </View>
+
+        <View style={{flexDirection:'row', flexWrap: 'wrap', marginLeft:Sizes.wp('3%'), marginRight:Sizes.wp('3%'), marginBottom:Sizes.wp('4%'), justifyContent:'space-between'}}>
+            <View style={{height:Sizes.wp('50%'), width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                
+            </View>
+
+            <View style={{justifyContent:'space-between'}}>
+
+                <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:Sizes.wp('60%'), borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                    
+                </View>
+                
+                <View style={{flexDirection:'row', justifyContent:'space-between', }}>
+                    <View style={{height: Sizes.wp('46%') - ((Sizes.wp('100%') - Sizes.wp('20%'))  / 3), width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                        
+                    </View>
+
+                    <View style={{height: Sizes.wp('46%') - ((Sizes.wp('100%') - Sizes.wp('20%'))  / 3), width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                        
+                    </View>
+                </View>
+
+            </View>
+            
+        </View>
+
+    </ScrollView>
 );
 
 const SecondRoute = () => (
-    <View style={[{ flex:1, backgroundColor: '#673ab7' }]} />
+    <ScrollView showsVerticalScrollIndicator={false} style={[{ flex:1, backgroundColor: '#673ab7' }]}>
+        
+        {/* first row */}
+
+        <View style={{flexDirection:'row', flexWrap: 'wrap', marginLeft:Sizes.wp('3%'), marginRight:Sizes.wp('3%'), marginBottom:Sizes.wp('4%'), justifyContent:'space-between'}}>
+            <View style={{height:((Sizes.wp('100%') - Sizes.wp('20%'))  / 3)*2 + Sizes.wp('4%'), width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                
+            </View>
+
+            <View style={{justifyContent:'space-between'}}>
+
+                <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:Sizes.wp('60%'), marginBottom:Sizes.wp('4%'), borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                    
+                </View>
+
+                <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:Sizes.wp('60%'), borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                    
+                </View>
+
+            </View>
+            
+        </View>
+
+        <View style={{flexDirection:'row', flexWrap: 'wrap', marginLeft:Sizes.wp('3%'), marginRight:Sizes.wp('3%'), marginBottom:Sizes.wp('4%'), justifyContent:'space-between'}}>
+            <View style={{height:((Sizes.wp('100%') - Sizes.wp('20%'))  / 3)*2 + Sizes.wp('4%'), width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                
+            </View>
+
+            <View style={{justifyContent:'space-between'}}>
+
+                <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:Sizes.wp('60%'), marginBottom:Sizes.wp('4%'), borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                    
+                </View>
+
+                <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:Sizes.wp('60%'), borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                    
+                </View>
+
+            </View>
+            
+        </View>
+
+    </ScrollView>
 );
 
 const ThirdRoute = () => (
@@ -43,22 +130,32 @@ export default class User extends Component {
             };
         }
 
-        static navigationOptions = ({ navigation }) => ({
-            title: "Ghost",
+        static navigationOptions = ({ navigation }) => {
             //headerTransparent: true,
+
+            return {
+                headerTitle: '',
+                //headerLeft: () => ( <HeaderBackButton tintColor="#fff" onPress={() => navigation.goBack()} /> ),
+                headerRight: () => ( 
+                    <View style={{flex:1, justifyContent:'center', height:Sizes.wp('5%'), width:Sizes.wp('10%'), marginRight:Sizes.wp('0%')}}>
+                        <TouchableOpacity 
+                            //onPress={() => this.followFunction()}
+                            style={{backgroundColor:'yellow', height:Sizes.wp('10%'), width:Sizes.wp('10%'), justifyContent: 'center', alignItems:'center', borderRadius:Sizes.wp('10%')/2 }}>
+                            <Entypo name='dots-three-vertical' size={Sizes.wp('5%')} color={Colors.black} />
+                        </TouchableOpacity>
+                    </View>
+                ),
+                
+                headerStyle: {
+                    backgroundColor:Colors.white,
+                    elevation: 0,
+                    shadowOpacity: 0,
+                },
+                //headerTintColor: "#fff",
+                
+            };
             
-            //headerLeft: () => ( <HeaderBackButton tintColor="#fff" onPress={() => navigation.goBack()} /> ),
-            headerRight: () => (
-                    // <View>
-                    //     <Text style={{color="#000"}}>Ghost</Text>
-                    // </View>
-                    <Button
-                        title="Info"
-                        color="red"
-                    />
-            ),
-            
-        });
+        };
 
         _handleIndexChange = index => this.setState({ index });
 
@@ -100,7 +197,7 @@ export default class User extends Component {
         render() {
             
             return (
-                <View style={{flex:1, backgroundColor:Colors.white, marginTop:Sizes.wp('3%'), marginBottom:Sizes.wp('3%')}}>
+                <View style={{flex:1, backgroundColor:Colors.white, paddingTop:Sizes.wp('3%')}}>
                     
                     {/* user image */}
                     <View style={{flexDirection:'row', alignItems:'flex-start', marginLeft:Sizes.wp('10%'), marginBottom:Sizes.wp('12%')}}>
@@ -156,13 +253,15 @@ export default class User extends Component {
                     </View>
                     
                     {/* tab navigator */}
-                    <TabView
-                        navigationState={this.state}
-                        renderScene={this._renderScene}
-                        renderTabBar={this._renderTabBar}
-                        onIndexChange={this._handleIndexChange}
-                        initialLayout={{ width:Sizes.deviceWidth }}
-                    />
+                    <View style={{flex:1}}>
+                        <TabView
+                            navigationState={this.state}
+                            renderScene={this._renderScene}
+                            renderTabBar={this._renderTabBar}
+                            onIndexChange={this._handleIndexChange}
+                            initialLayout={{ width:Sizes.deviceWidth }}
+                        />
+                    </View>
                    
                 </View>
             );
