@@ -8,9 +8,22 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Entypo from 'react-native-vector-icons/Entypo';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
+import { createStackNavigator, TransitionPresets, HeaderBackButton } from 'react-navigation-stack';
+
 import HomeScreen from '../screens/Home';
 import MapScreen from '../screens/Map';
 import UserScreen from '../screens/User';
+
+const ScreenUser = createStackNavigator ({
+    screen: UserScreen,
+    // User: {
+        
+    //     // navigationOptions: {
+    //     //     title: "fuck",
+    //     // }
+    // }
+});
+
 
 const bottomTabNavigator = createBottomTabNavigator(
     {   
@@ -31,7 +44,7 @@ const bottomTabNavigator = createBottomTabNavigator(
             }
         },
         User: {
-            screen: UserScreen,
+            screen: ScreenUser,
             navigationOptions: {
                 tabBarIcon: ({ tintColor }) => (
                     <FontAwesome5 name="user" size={wp('5%')} color={tintColor} />
