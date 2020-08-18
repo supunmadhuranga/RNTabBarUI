@@ -6,6 +6,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     ScrollView,
+    FlatList,
 } from 'react-native';
 import Animated from 'react-native-reanimated';
 import Sizes from '../styles/sizes';
@@ -18,6 +19,39 @@ import Entypo from 'react-native-vector-icons/Entypo';
 
 import board1 from '../../assets/coming.png';
 import { Button } from 'react-native-paper';
+
+const ENTRIES1 = [
+    {
+        title: 'Canyon',
+        subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
+        illustration: 'https://i.imgur.com/UYiroysl.jpg'
+    },
+    {
+        title: 'NYC',
+        subtitle: 'Lorem ipsum dolor sit amet',
+        illustration: 'https://i.imgur.com/UPrs1EWl.jpg'
+    },
+    {
+        title: 'White Sunset',
+        subtitle: 'Lorem ipsum dolor sit amet et nuncat ',
+        illustration: 'https://i.imgur.com/MABUbpDl.jpg'
+    },
+    {
+        title: 'Greece',
+        subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
+        illustration: 'https://i.imgur.com/KZsmUi2l.jpg'
+    },
+    {
+        title: 'New Zealand',
+        subtitle: 'Lorem ipsum dolor sit amet',
+        illustration: 'https://i.imgur.com/2nCt3Sbl.jpg'
+    },
+    {
+        title: 'Germany',
+        subtitle: 'Lorem ipsum dolor sit amet',
+        illustration: 'https://i.imgur.com/lceHsT6l.jpg'
+    }
+];
 
 const FirstRoute = () => (
     <ScrollView showsVerticalScrollIndicator={false} style={[{ flex:1, backgroundColor: '#ff4081' }]}>
@@ -113,9 +147,53 @@ const SecondRoute = () => (
 );
 
 const ThirdRoute = () => (
-    <View style={[{ flex:1, backgroundColor: '#673ab7' }]} />
+    <ScrollView showsVerticalScrollIndicator={false} style={[{ flex:1, backgroundColor: '#673ab7' }]}>
+        
+        {/* first row */}
+        <View style={{marginLeft:Sizes.wp('4%'), marginRight:Sizes.wp('4%')}}>
+            <View style={{marginTop:Sizes.wp('2%'), marginBottom:Sizes.wp('4%')}}>
+                <Text style={{fontFamily:Fonts.mainMedium, color:Colors.black, fontSize:Sizes.wp('4%'), marginBottom:Sizes.wp('1%')}}>About me</Text>
+                <Text style={{ flexWrap: 'wrap', fontFamily:Fonts.main, color:Colors.black, fontSize:Sizes.wp('3.5%'), marginBottom:Sizes.wp('1%')}}>
+                    My name is Supun Madhuranga. I'm from Sri Lanka. I love Cyber Security and Ethical Hacking.
+                </Text>
+                
+            </View>
+
+            <View style={{marginTop:Sizes.wp('2%'), marginBottom:Sizes.wp('4%')}}>
+                <Text style={{fontFamily:Fonts.mainMedium, color:Colors.black, fontSize:Sizes.wp('4%'), marginBottom:Sizes.wp('1%')}}>Basic Infomation</Text>
+                <Text style={{ flexWrap: 'wrap', fontFamily:Fonts.main, color:Colors.black, fontSize:Sizes.wp('3.5%'), marginBottom:Sizes.wp('1%')}}>Age</Text>
+                <Text style={{ flexWrap: 'wrap', fontFamily:Fonts.main, color:Colors.black, fontSize:Sizes.wp('3.5%'), marginBottom:Sizes.wp('1%')}}>Sex</Text>
+            </View>
+
+        </View>
+
+        <View style={{}}>
+            <View style={{marginTop:Sizes.wp('5%'), marginBottom:Sizes.wp('4%'), marginLeft:Sizes.wp('4%'), marginRight:Sizes.wp('4%')}}>
+                <Text style={{fontFamily:Fonts.mainMedium, fontSize:Sizes.wp('4%')}}>Interest</Text>
+            </View>
+            <View style={{marginBottom:Sizes.wp('5%')}}>
+                <FlatList
+                    showsHorizontalScrollIndicator={false}
+                    horizontal
+                    data={ENTRIES1}
+                    renderItem={_renderItemIcons}
+                    keyExtractor={(item, index) => index.toString()}
+                />
+            </View>
+        </View>
+
+    </ScrollView>
 );
 
+const _renderItemIcons = ({item, index}) => {
+    return (
+        <View style={{height:Sizes.wp('15%'), width:Sizes.wp('30%'), marginLeft:Sizes.wp('4%'), borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+            <View style={{flex:1, marginTop:Sizes.wp('1%'), justifyContent:'center', alignItems:'center'}}>
+                <Text style={{fontFamily:Fonts.main, fontSize:Sizes.wp('3.5%')}}>{item.title}</Text>
+            </View>
+        </View>
+    );
+}
 
 export default class User extends Component {
         constructor(props) {
