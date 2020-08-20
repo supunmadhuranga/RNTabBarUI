@@ -14,6 +14,7 @@ import HomeScreen from '../screens/Home';
 import MapScreen from '../screens/Map';
 import UserScreen from '../screens/User';
 
+/* bottom tab screens set*/
 const ScreenHome = createStackNavigator ({
     screen: HomeScreen,
 });
@@ -63,21 +64,5 @@ const bottomTabNavigator = createBottomTabNavigator(
         }
     }
 );
-
-// export default class BottomTabNavigator extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//     };
-//   }
-
-//   render() {
-//     return (
-//       <View>
-//         <Text> BottomTabNavigator </Text>
-//       </View>
-//     );
-//   }
-// }
 
 export default createAppContainer(bottomTabNavigator);

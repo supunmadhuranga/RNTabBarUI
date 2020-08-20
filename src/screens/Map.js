@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 
 import Sizes from '../styles/sizes';
 import Colors from '../styles/colors';
@@ -17,22 +17,10 @@ export default class Map extends Component {
         };
     }
 
-    // navigation header bar
+    /* navigation header bar */
     static navigationOptions = ({ navigation }) => {
-        //headerTransparent: true,
-
         return {
             headerTitle: 'Sydney',
-            //headerLeft: () => ( <HeaderBackButton tintColor="#fff" onPress={() => navigation.goBack()} /> ),
-            // headerRight: () => ( 
-            //     <View style={{flex:1, justifyContent:'center', height:Sizes.wp('5%'), width:Sizes.wp('10%'), marginRight:Sizes.wp('0%')}}>
-            //         <TouchableOpacity 
-            //             //onPress={() => this.followFunction()}
-            //             style={{backgroundColor:'yellow', height:Sizes.wp('10%'), width:Sizes.wp('10%'), justifyContent: 'center', alignItems:'center', borderRadius:Sizes.wp('10%')/2 }}>
-            //             <Icon name='search' size={Sizes.wp('5%')} color={Colors.black} />
-            //         </TouchableOpacity>
-            //     </View>
-            // ),
             
             headerStyle: {
                 backgroundColor:Colors.white,
@@ -41,13 +29,11 @@ export default class Map extends Component {
             },
             headerTitleStyle: {
                 //flex: 1,
-                //textAlign: 'center',
+                textAlign: 'left',
                 fontSize:Sizes.wp('6%'),
                 fontFamily:Fonts.mainBold,
                 fontWeight: '200',
-                //width:Sizes.wp('60%'),
             }
-            //headerTintColor: "#fff",  
         };  
     };
 
@@ -55,20 +41,25 @@ export default class Map extends Component {
         return (
             <View style={{flex:1, backgroundColor:Colors.white,}}>
                 
-                {/* header title */}
-                {/* <View style={{marginLeft:Sizes.wp('4%'), marginRight:Sizes.wp('4%'), marginTop:Sizes.wp('4%'), marginBottom:Sizes.wp('2%')}}>
-                    <Text style={{fontFamily:Fonts.mainBold, fontSize:Sizes.wp('6%')}}>Sydney</Text>
-                </View> */}
-                
                 {/* search bar */}
                 <View style={{flexDirection:'row',  alignItems: 'center', padding:Sizes.wp('1%'), marginLeft:Sizes.wp('4%'), marginRight:Sizes.wp('4%'), marginBottom:Sizes.wp('3%'), borderWidth:1, borderRadius:Sizes.mainItemsRadius, borderColor:Colors.separator}}>
-                    <Icon name='search' size={Sizes.wp('4%')} color='#CCD1D1' style={{paddingLeft:Sizes.wp('2%')}} />
+                    <TouchableOpacity 
+                        //onPress={() => this.followFunction()}
+                        style={{ height:Sizes.wp('6%'), width:Sizes.wp('6%'), justifyContent: 'center', alignItems:'center',  borderRadius:Sizes.wp('6%')/2 }}>
+                        <Icon name='search' size={Sizes.wp('4%')} color='#CCD1D1' />
+                    </TouchableOpacity>
+                    {/* <Icon name='search' size={Sizes.wp('4%')} color='#CCD1D1' style={{paddingLeft:Sizes.wp('2%')}} /> */}
                     <TextInput 
                         style={{flex:1, fontFamily:Fonts.main, fontSize:Sizes.wp('3.5%'), paddingLeft:Sizes.wp('2%'), }} 
                         placeholder="Search country..."
                         underlineColorAndroid="transparent"
                     />
-                    <Octicons name='settings' size={Sizes.wp('4%')} color='#CCD1D1' style={{paddingLeft:Sizes.wp('2%'), paddingRight:Sizes.wp('2%')}} />
+                    <TouchableOpacity 
+                        //onPress={() => this.followFunction()}
+                        style={{ height:Sizes.wp('6%'), width:Sizes.wp('6%'), justifyContent: 'center', alignItems:'center',  borderRadius:Sizes.wp('6%')/2 }}>
+                        <Octicons name='settings' size={Sizes.wp('4%')} color='#CCD1D1' />
+                    </TouchableOpacity>
+                    {/* <Octicons name='settings' size={Sizes.wp('4%')} color='#CCD1D1' style={{paddingLeft:Sizes.wp('2%'), paddingRight:Sizes.wp('2%')}} /> */}
                 </View>
 
                 {/* map component */}

@@ -21,8 +21,171 @@ import board1 from '../../assets/coming.png';
 import { Button } from 'react-native-paper';
 
 import PhotosScreen from './userInfo/Photos';
-import EventsScreen from './userInfo/Events';
-import InfoScreen from './userInfo/Info';
+
+const ENTRIES1 = [
+    {
+        title: 'Canyon',
+        subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
+        illustration: 'https://i.imgur.com/UYiroysl.jpg'
+    },
+    {
+        title: 'NYC',
+        subtitle: 'Lorem ipsum dolor sit amet',
+        illustration: 'https://i.imgur.com/UPrs1EWl.jpg'
+    },
+    {
+        title: 'White Sunset',
+        subtitle: 'Lorem ipsum dolor sit amet et nuncat ',
+        illustration: 'https://i.imgur.com/MABUbpDl.jpg'
+    },
+    {
+        title: 'Greece',
+        subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
+        illustration: 'https://i.imgur.com/KZsmUi2l.jpg'
+    },
+    {
+        title: 'New Zealand',
+        subtitle: 'Lorem ipsum dolor sit amet',
+        illustration: 'https://i.imgur.com/2nCt3Sbl.jpg'
+    },
+    {
+        title: 'Germany',
+        subtitle: 'Lorem ipsum dolor sit amet',
+        illustration: 'https://i.imgur.com/lceHsT6l.jpg'
+    }
+];
+
+const FirstRoute = () => (
+    <ScrollView showsVerticalScrollIndicator={false} style={[{ flex:1, backgroundColor: '#ff4081' }]}>
+        
+        {/* first row */}
+        <View style={{flexDirection:'row', flexWrap: 'wrap', marginLeft:Sizes.wp('3%'), marginRight:Sizes.wp('3%'), marginBottom:Sizes.wp('4%'), justifyContent:'space-between'}}>
+            <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                
+            </View>
+
+            <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                
+            </View>
+
+            <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                
+            </View>
+            
+        </View>
+
+        <View style={{flexDirection:'row', flexWrap: 'wrap', marginLeft:Sizes.wp('3%'), marginRight:Sizes.wp('3%'), marginBottom:Sizes.wp('4%'), justifyContent:'space-between'}}>
+            <View style={{height:Sizes.wp('50%'), width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                
+            </View>
+
+            <View style={{justifyContent:'space-between'}}>
+
+                <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:Sizes.wp('60%'), borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                    
+                </View>
+                
+                <View style={{flexDirection:'row', justifyContent:'space-between', }}>
+                    <View style={{height: Sizes.wp('46%') - ((Sizes.wp('100%') - Sizes.wp('20%'))  / 3), width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                        
+                    </View>
+
+                    <View style={{height: Sizes.wp('46%') - ((Sizes.wp('100%') - Sizes.wp('20%'))  / 3), width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                        
+                    </View>
+                </View>
+
+            </View>
+            
+        </View>
+
+    </ScrollView>
+);
+
+const SecondRoute = () => (
+    <ScrollView showsVerticalScrollIndicator={false} style={[{ flex:1, backgroundColor: '#673ab7' }]}>
+        
+        {/* first row */}
+
+        <View style={{flexDirection:'row', flexWrap: 'wrap', marginLeft:Sizes.wp('3%'), marginRight:Sizes.wp('3%'), marginBottom:Sizes.wp('4%'), justifyContent:'space-between'}}>
+            <View style={{height:((Sizes.wp('100%') - Sizes.wp('20%'))  / 3)*2 + Sizes.wp('4%'), width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                
+            </View>
+
+            <View style={{justifyContent:'space-between'}}>
+
+                <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:Sizes.wp('60%'), marginBottom:Sizes.wp('4%'), borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                    
+                </View>
+
+                <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:Sizes.wp('60%'), borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                    
+                </View>
+
+            </View>
+            
+        </View>
+
+        <View style={{flexDirection:'row', flexWrap: 'wrap', marginLeft:Sizes.wp('3%'), marginRight:Sizes.wp('3%'), marginBottom:Sizes.wp('4%'), justifyContent:'space-between'}}>
+            <View style={{height:((Sizes.wp('100%') - Sizes.wp('20%'))  / 3)*2 + Sizes.wp('4%'), width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                
+            </View>
+
+            <View style={{justifyContent:'space-between'}}>
+
+                <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:Sizes.wp('60%'), marginBottom:Sizes.wp('4%'), borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                    
+                </View>
+
+                <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:Sizes.wp('60%'), borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
+                    
+                </View>
+
+            </View>
+            
+        </View>
+
+    </ScrollView>
+);
+
+const ThirdRoute = () => (
+    <ScrollView showsVerticalScrollIndicator={false} style={[{ flex:1, backgroundColor: '#673ab7' }]}>
+        
+        {/* first row */}
+        <View style={{marginLeft:Sizes.wp('4%'), marginRight:Sizes.wp('4%')}}>
+            <View style={{marginTop:Sizes.wp('2%'), marginBottom:Sizes.wp('4%')}}>
+                <Text style={{fontFamily:Fonts.mainMedium, color:Colors.black, fontSize:Sizes.wp('4%'), marginBottom:Sizes.wp('1%')}}>About me</Text>
+                <Text style={{ flexWrap: 'wrap', fontFamily:Fonts.main, color:Colors.black, fontSize:Sizes.wp('3.5%'), marginBottom:Sizes.wp('1%')}}>
+                    My name is Supun Madhuranga. I'm from Sri Lanka. I love Cyber Security and Ethical Hacking.
+                </Text>
+                
+            </View>
+
+            <View style={{marginTop:Sizes.wp('2%'), marginBottom:Sizes.wp('4%')}}>
+                <Text style={{fontFamily:Fonts.mainMedium, color:Colors.black, fontSize:Sizes.wp('4%'), marginBottom:Sizes.wp('1%')}}>Basic Infomation</Text>
+                <Text style={{ flexWrap: 'wrap', fontFamily:Fonts.main, color:Colors.black, fontSize:Sizes.wp('3.5%'), marginBottom:Sizes.wp('1%')}}>Age</Text>
+                <Text style={{ flexWrap: 'wrap', fontFamily:Fonts.main, color:Colors.black, fontSize:Sizes.wp('3.5%'), marginBottom:Sizes.wp('1%')}}>Sex</Text>
+            </View>
+
+        </View>
+
+        <View style={{}}>
+            <View style={{marginTop:Sizes.wp('5%'), marginBottom:Sizes.wp('4%'), marginLeft:Sizes.wp('4%'), marginRight:Sizes.wp('4%')}}>
+                <Text style={{fontFamily:Fonts.mainMedium, fontSize:Sizes.wp('4%')}}>Interest</Text>
+            </View>
+            <View style={{marginBottom:Sizes.wp('5%')}}>
+                <FlatList
+                    showsHorizontalScrollIndicator={false}
+                    horizontal
+                    data={ENTRIES1}
+                    renderItem={_renderItemIcons}
+                    keyExtractor={(item, index) => index.toString()}
+                />
+            </View>
+        </View>
+
+    </ScrollView>
+);
 
 const _renderItemIcons = ({item, index}) => {
     return (
@@ -71,7 +234,6 @@ export default class User extends Component {
             
         };
 
-        /* tab change handler start */
         _handleIndexChange = index => this.setState({ index });
 
         _renderTabBar = props => {
@@ -91,26 +253,24 @@ export default class User extends Component {
                         ),0,0
                     );
         
-                    return (
-                        <TouchableOpacity
-                            style={styles.tabItem}
-                            onPress={() => this.setState({ index: i })}
-                        >
-                            <Animated.Text style={{ color, fontFamily:Fonts.mainMedium, fontSize:Sizes.wp('3.5%') }}>{route.title}</Animated.Text>
-                        </TouchableOpacity>
-                    );
+                  return (
+                    <TouchableOpacity
+                      style={styles.tabItem}
+                      onPress={() => this.setState({ index: i })}>
+                      <Animated.Text style={{ color, fontFamily:Fonts.mainMedium, fontSize:Sizes.wp('3.5%') }}>{route.title}</Animated.Text>
+                    </TouchableOpacity>
+                  );
                 })}
               </View>
             );
         };
 
         _renderScene = SceneMap({
+            //first: FirstRoute,
             first: PhotosScreen,
-            second: EventsScreen,
-            third: InfoScreen,
+            second: SecondRoute,
+            third: ThirdRoute,
         });
-
-        /* tab change handler end */
 
         render() {
             
