@@ -20,180 +20,9 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import board1 from '../../assets/coming.png';
 import { Button } from 'react-native-paper';
 
-const ENTRIES1 = [
-    {
-        title: 'Canyon',
-        subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-        illustration: 'https://i.imgur.com/UYiroysl.jpg'
-    },
-    {
-        title: 'NYC',
-        subtitle: 'Lorem ipsum dolor sit amet',
-        illustration: 'https://i.imgur.com/UPrs1EWl.jpg'
-    },
-    {
-        title: 'White Sunset',
-        subtitle: 'Lorem ipsum dolor sit amet et nuncat ',
-        illustration: 'https://i.imgur.com/MABUbpDl.jpg'
-    },
-    {
-        title: 'Greece',
-        subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-        illustration: 'https://i.imgur.com/KZsmUi2l.jpg'
-    },
-    {
-        title: 'New Zealand',
-        subtitle: 'Lorem ipsum dolor sit amet',
-        illustration: 'https://i.imgur.com/2nCt3Sbl.jpg'
-    },
-    {
-        title: 'Germany',
-        subtitle: 'Lorem ipsum dolor sit amet',
-        illustration: 'https://i.imgur.com/lceHsT6l.jpg'
-    }
-];
-
-const FirstRoute = () => (
-    <ScrollView showsVerticalScrollIndicator={false} style={[{ flex:1, backgroundColor: '#ff4081' }]}>
-        
-        {/* first row */}
-        <View style={{flexDirection:'row', flexWrap: 'wrap', marginLeft:Sizes.wp('3%'), marginRight:Sizes.wp('3%'), marginBottom:Sizes.wp('4%'), justifyContent:'space-between'}}>
-            <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
-                
-            </View>
-
-            <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
-                
-            </View>
-
-            <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
-                
-            </View>
-            
-        </View>
-
-        <View style={{flexDirection:'row', flexWrap: 'wrap', marginLeft:Sizes.wp('3%'), marginRight:Sizes.wp('3%'), marginBottom:Sizes.wp('4%'), justifyContent:'space-between'}}>
-            <View style={{height:Sizes.wp('50%'), width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
-                
-            </View>
-
-            <View style={{justifyContent:'space-between'}}>
-
-                <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:Sizes.wp('60%'), borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
-                    
-                </View>
-                
-                <View style={{flexDirection:'row', justifyContent:'space-between', }}>
-                    <View style={{height: Sizes.wp('46%') - ((Sizes.wp('100%') - Sizes.wp('20%'))  / 3), width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
-                        
-                    </View>
-
-                    <View style={{height: Sizes.wp('46%') - ((Sizes.wp('100%') - Sizes.wp('20%'))  / 3), width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
-                        
-                    </View>
-                </View>
-
-            </View>
-            
-        </View>
-
-    </ScrollView>
-);
-
-const SecondRoute = () => (
-    <ScrollView showsVerticalScrollIndicator={false} style={[{ flex:1, backgroundColor: '#673ab7' }]}>
-        
-        {/* first row */}
-
-        <View style={{flexDirection:'row', flexWrap: 'wrap', marginLeft:Sizes.wp('3%'), marginRight:Sizes.wp('3%'), marginBottom:Sizes.wp('4%'), justifyContent:'space-between'}}>
-            <View style={{height:((Sizes.wp('100%') - Sizes.wp('20%'))  / 3)*2 + Sizes.wp('4%'), width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
-                
-            </View>
-
-            <View style={{justifyContent:'space-between'}}>
-
-                <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:Sizes.wp('60%'), marginBottom:Sizes.wp('4%'), borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
-                    
-                </View>
-
-                <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:Sizes.wp('60%'), borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
-                    
-                </View>
-
-            </View>
-            
-        </View>
-
-        <View style={{flexDirection:'row', flexWrap: 'wrap', marginLeft:Sizes.wp('3%'), marginRight:Sizes.wp('3%'), marginBottom:Sizes.wp('4%'), justifyContent:'space-between'}}>
-            <View style={{height:((Sizes.wp('100%') - Sizes.wp('20%'))  / 3)*2 + Sizes.wp('4%'), width:(Sizes.wp('100%') - Sizes.wp('20%')) / 3, borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
-                
-            </View>
-
-            <View style={{justifyContent:'space-between'}}>
-
-                <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:Sizes.wp('60%'), marginBottom:Sizes.wp('4%'), borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
-                    
-                </View>
-
-                <View style={{height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3, width:Sizes.wp('60%'), borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
-                    
-                </View>
-
-            </View>
-            
-        </View>
-
-    </ScrollView>
-);
-
-const ThirdRoute = () => (
-    <ScrollView showsVerticalScrollIndicator={false} style={[{ flex:1, backgroundColor: '#673ab7' }]}>
-        
-        {/* first row */}
-        <View style={{marginLeft:Sizes.wp('4%'), marginRight:Sizes.wp('4%')}}>
-            <View style={{marginTop:Sizes.wp('2%'), marginBottom:Sizes.wp('4%')}}>
-                <Text style={{fontFamily:Fonts.mainMedium, color:Colors.black, fontSize:Sizes.wp('4%'), marginBottom:Sizes.wp('1%')}}>About me</Text>
-                <Text style={{ flexWrap: 'wrap', fontFamily:Fonts.main, color:Colors.black, fontSize:Sizes.wp('3.5%'), marginBottom:Sizes.wp('1%')}}>
-                    My name is Supun Madhuranga. I'm from Sri Lanka. I love Cyber Security and Ethical Hacking.
-                </Text>
-                
-            </View>
-
-            <View style={{marginTop:Sizes.wp('2%'), marginBottom:Sizes.wp('4%')}}>
-                <Text style={{fontFamily:Fonts.mainMedium, color:Colors.black, fontSize:Sizes.wp('4%'), marginBottom:Sizes.wp('1%')}}>Basic Infomation</Text>
-                <Text style={{ flexWrap: 'wrap', fontFamily:Fonts.main, color:Colors.black, fontSize:Sizes.wp('3.5%'), marginBottom:Sizes.wp('1%')}}>Age</Text>
-                <Text style={{ flexWrap: 'wrap', fontFamily:Fonts.main, color:Colors.black, fontSize:Sizes.wp('3.5%'), marginBottom:Sizes.wp('1%')}}>Sex</Text>
-            </View>
-
-        </View>
-
-        <View style={{}}>
-            <View style={{marginTop:Sizes.wp('5%'), marginBottom:Sizes.wp('4%'), marginLeft:Sizes.wp('4%'), marginRight:Sizes.wp('4%')}}>
-                <Text style={{fontFamily:Fonts.mainMedium, fontSize:Sizes.wp('4%')}}>Interest</Text>
-            </View>
-            <View style={{marginBottom:Sizes.wp('5%')}}>
-                <FlatList
-                    showsHorizontalScrollIndicator={false}
-                    horizontal
-                    data={ENTRIES1}
-                    renderItem={_renderItemIcons}
-                    keyExtractor={(item, index) => index.toString()}
-                />
-            </View>
-        </View>
-
-    </ScrollView>
-);
-
-const _renderItemIcons = ({item, index}) => {
-    return (
-        <View style={{height:Sizes.wp('15%'), width:Sizes.wp('30%'), marginLeft:Sizes.wp('4%'), borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
-            <View style={{flex:1, marginTop:Sizes.wp('1%'), justifyContent:'center', alignItems:'center'}}>
-                <Text style={{fontFamily:Fonts.main, fontSize:Sizes.wp('3.5%')}}>{item.title}</Text>
-            </View>
-        </View>
-    );
-}
+import PhotosScreen from './userInfo/Photos';
+import EventsScreen from './userInfo/Events';
+import InfoScreen from './userInfo/Info';
 
 export default class User extends Component {
         constructor(props) {
@@ -208,17 +37,15 @@ export default class User extends Component {
             };
         }
 
+        /* navigation header */
         static navigationOptions = ({ navigation }) => {
-            //headerTransparent: true,
-
             return {
                 headerTitle: '',
-                //headerLeft: () => ( <HeaderBackButton tintColor="#fff" onPress={() => navigation.goBack()} /> ),
                 headerRight: () => ( 
                     <View style={{flex:1, justifyContent:'center', height:Sizes.wp('5%'), width:Sizes.wp('10%'), marginRight:Sizes.wp('0%')}}>
                         <TouchableOpacity 
                             //onPress={() => this.followFunction()}
-                            style={{backgroundColor:'yellow', height:Sizes.wp('10%'), width:Sizes.wp('10%'), justifyContent: 'center', alignItems:'center', borderRadius:Sizes.wp('10%')/2 }}>
+                            style={{height:Sizes.wp('10%'), width:Sizes.wp('10%'), justifyContent: 'center', alignItems:'center', borderRadius:Sizes.wp('10%')/2 }}>
                             <Entypo name='dots-three-vertical' size={Sizes.wp('5%')} color={Colors.black} />
                         </TouchableOpacity>
                     </View>
@@ -230,11 +57,11 @@ export default class User extends Component {
                     shadowOpacity: 0,
                 },
                 //headerTintColor: "#fff",
-                
             };
             
         };
 
+        /* tab change handler start */
         _handleIndexChange = index => this.setState({ index });
 
         _renderTabBar = props => {
@@ -254,34 +81,38 @@ export default class User extends Component {
                         ),0,0
                     );
         
-                  return (
-                    <TouchableOpacity
-                      style={styles.tabItem}
-                      onPress={() => this.setState({ index: i })}>
-                      <Animated.Text style={{ color, fontFamily:Fonts.mainMedium, fontSize:Sizes.wp('3.5%') }}>{route.title}</Animated.Text>
-                    </TouchableOpacity>
-                  );
+                    return (
+                        <TouchableOpacity
+                            key={i}
+                            style={styles.tabItem}
+                            onPress={() => this.setState({ index: i })}
+                        >
+                            <Animated.Text style={{ color, fontFamily:Fonts.mainMedium, fontSize:Sizes.wp('3.5%') }}>{route.title}</Animated.Text>
+                        </TouchableOpacity>
+                    );
                 })}
               </View>
             );
         };
 
         _renderScene = SceneMap({
-            first: FirstRoute,
-            second: SecondRoute,
-            third: ThirdRoute,
+            first: PhotosScreen,
+            second: EventsScreen,
+            third: InfoScreen,
         });
+
+        /* tab change handler end */
 
         render() {
             
             return (
                 <View style={{flex:1, backgroundColor:Colors.white, paddingTop:Sizes.wp('3%')}}>
                     
-                    {/* user image */}
+                    {/* user image and name*/}
                     <View style={{flexDirection:'row', alignItems:'flex-start', marginLeft:Sizes.wp('10%'), marginBottom:Sizes.wp('12%')}}>
                         <Image
                             source={board1}
-                            style={{height:Sizes.wp('15%'), width:Sizes.wp('15%'), resizeMode:'cover',borderWidth:1, borderColor:'black', borderRadius:Sizes.wp('15%')/2}}
+                            style={{height:Sizes.wp('15%'), width:Sizes.wp('15%'), resizeMode:'cover', borderRadius:Sizes.wp('15%')/2}}
                         />
                         <Text style={{fontFamily:Fonts.mainMedium, fontSize:Sizes.wp('5%'), marginLeft:Sizes.wp('3%')}}>Seb Frechard</Text>
                     </View>
@@ -327,7 +158,6 @@ export default class User extends Component {
                             </View>
 
                         </View>
-                        
                     </View>
                     
                     {/* tab navigator */}
