@@ -24,16 +24,6 @@ import PhotosScreen from './userInfo/Photos';
 import EventsScreen from './userInfo/Events';
 import InfoScreen from './userInfo/Info';
 
-const _renderItemIcons = ({item, index}) => {
-    return (
-        <View style={{height:Sizes.wp('15%'), width:Sizes.wp('30%'), marginLeft:Sizes.wp('4%'), borderRadius:Sizes.mainItemsRadius, backgroundColor:'#CCD1D1'}}>
-            <View style={{flex:1, marginTop:Sizes.wp('1%'), justifyContent:'center', alignItems:'center'}}>
-                <Text style={{fontFamily:Fonts.main, fontSize:Sizes.wp('3.5%')}}>{item.title}</Text>
-            </View>
-        </View>
-    );
-}
-
 export default class User extends Component {
         constructor(props) {
             super(props);
@@ -93,6 +83,7 @@ export default class User extends Component {
         
                     return (
                         <TouchableOpacity
+                            key={i}
                             style={styles.tabItem}
                             onPress={() => this.setState({ index: i })}
                         >
