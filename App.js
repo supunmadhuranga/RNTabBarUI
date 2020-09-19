@@ -16,12 +16,15 @@ import {
     initialWindowMetrics,
 } from 'react-native-safe-area-context';
 
+import LoadFirebase from './src/config/firebase';
 import * as Font from 'expo-font';
 import Colors from './src/styles/colors';
 import Sizes from './src/styles/sizes';
 
 import AppPreLoader from "./src/components/AppPreLoader";
 import Navigator from './src/navigations/BottomTabNavigator';
+//import AuthNavigator from './src/screens/auth/Login';
+import AuthNavigator from './src/navigations/AuthNavigator';
 import Home from './src/screens/Home';
 
 //console.reportErrorsAsExceptions = false;
@@ -55,14 +58,14 @@ export default class App extends React.Component {
         })
         this.setState({
             fontLoaded: true,
-        })
+        });
     }
 
     render() {
         if (this.state.fontLoaded) {
             return (
                 <View style={styles.container}>
-                    <Navigator/>
+                    <AuthNavigator/>
                 </View>
             );
         } else {

@@ -4,7 +4,7 @@ export default {
 
     white:'#ffffff',
     
-    main:'#4e9643',
+    main:'#2196f3',
 
     mainBackground: '#fffcf5',
 
@@ -16,5 +16,10 @@ export default {
 
     separator:'#e2e2e2',
     
+    warn:'#F3BB45',
+
+    error:'#EB5E28',
+
+    success:'#4F9643',
 
 }
