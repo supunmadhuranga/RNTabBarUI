@@ -8,6 +8,7 @@ import {
     TextInput,
     TouchableOpacity,
     StyleSheet,
+    AsyncStorage,
 } from 'react-native';
 import firebase from 'firebase';
 
@@ -17,6 +18,7 @@ import Fonts from '../../styles/fonts';
 
 import Ripple from '../../components/react-native-material-ripple/index';
 import BottomNotification from '../../components/BottomNotification';
+import SnackBar from '../../components/snackbar/index';
 
 //import Constants from 'expo-constants';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -41,6 +43,8 @@ export default class Login extends Component {
             bottomNotificationType:'',
             bottomNotificationMessage:'',
         };
+
+        this.checkSession();
     }
 
     /**
@@ -55,7 +59,22 @@ export default class Login extends Component {
             <View />
         ),
         
-    })
+    });
+
+    checkSession = async() => {
+        // const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
+        // if (isLoggedIn === '1') {
+
+        //     this.props.navigation.navigate('App');
+            
+        // } else {
+        //     this.props.navigation.navigate('Auth');
+        // }
+
+        firebase.auth().onAuthStateChanged(user => {
+            this.props.navigation.navigate(user ? 'App' : 'Auth');
+        });
+    }
 
     showNotification = (type, message) => {
         if (!this.state.showBottomNotification) {
@@ -167,8 +186,16 @@ export default class Login extends Component {
 
             if (this.state.emailValidate && this.state.passwordValidate) {
                 firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
-                .then(() => {
-                    this.onLoginSuccess
+                .then((res) => {
+                    console.log(res)
+                    console.log('User logged-in successfully!')
+                    this.setState({
+                        loadLogin: false,
+                        email: '', 
+                        password: ''
+                    });
+                    //await AsyncStorage.setItem('isLoggedIn', '1');
+                    this.props.navigation.navigate('App');
                 })
                 .catch((error) => {
                     this.setState({ 
@@ -191,8 +218,12 @@ export default class Login extends Component {
         }
     }
 
-    onLoginSuccess = () => {
-        this.props.navigation.navigate('App');
+    // onLoginSuccess = () => {
+    //     this.props.navigation.navigate('App');
+    // }
+
+    forgotPassword = () => {
+        this.props.navigation.navigate('ResetPass');
     }
 
     render() {
@@ -255,36 +286,48 @@ export default class Login extends Component {
                                     >
                                         <Text style={styles.btnText} >Log in</Text>
                                     </Ripple>
-
-                                    <Ripple
-                                        style={styles.btnForgotpw}
-                                        rippleContainerBorderRadius={Sizes.mainItemsRadius}
-                                        rippleDuration={600}
-                                        onPress={() => this.forgotPassword()}
-                                    >
-                                        <Text style={{textAlign: 'center', fontFamily:Fonts.mainMedium, color:Colors.error, fontSize: Sizes.wp('3.75%'),}}>Forgot your passsword?</Text>
-                                    </Ripple>
-
-                                    <Ripple
-                                        style={styles.btnSignup}
-                                        rippleContainerBorderRadius={Sizes.mainItemsRadius}
-                                        rippleDuration={600}
-                                        onPress={() => this.props.navigation.navigate('Signup')}
-                                    >
-                                        <Text style={{textAlign: 'center'}}>
-                                            <Text style={{fontFamily:Fonts.mainMedium, color: '#66615b', fontSize: Sizes.wp('3.75%'),}}>Don't have an account? </Text>
-                                            <Text style={{fontFamily:Fonts.mainMedium, color:Colors.error, fontSize: Sizes.wp('3.75%'),}}>Sign Up</Text>
-                                        </Text>
-                                    </Ripple>
                                     
                                 </View>
                             }
+
+                            <View>
+                                <Ripple
+                                    style={styles.btnForgotpw}
+                                    rippleContainerBorderRadius={Sizes.mainItemsRadius}
+                                    rippleDuration={600}
+                                    onPress={() => this.forgotPassword()}
+                                >
+                                    <Text style={{textAlign: 'center', fontFamily:Fonts.mainMedium, color:Colors.error, fontSize: Sizes.wp('3.75%'),}}>Forgot your passsword?</Text>
+                                </Ripple>
+
+                                <Ripple
+                                    style={styles.btnSignup}
+                                    rippleContainerBorderRadius={Sizes.mainItemsRadius}
+                                    rippleDuration={600}
+                                    onPress={() => this.props.navigation.navigate('Signup')}
+                                >
+                                    <Text style={{textAlign: 'center'}}>
+                                        <Text style={{fontFamily:Fonts.mainMedium, color: '#66615b', fontSize: Sizes.wp('3.75%'),}}>Don't have an account? </Text>
+                                        <Text style={{fontFamily:Fonts.mainMedium, color:Colors.error, fontSize: Sizes.wp('3.75%'),}}>Sign Up</Text>
+                                    </Text>
+                                </Ripple>
+                            </View>
 
                         </View>
                     </ScrollView>
                             
 
                     <View>
+                    {/* <SnackBar
+                        visible={this.state.showBottomNotification}
+                        message={this.state.bottomNotificationMessage}
+                        actionHandler={() => {
+                            console.log("snackbar button clicked!")
+                        }}
+                        action={(
+                            <Icon name="close" size={20} />
+                        )}
+                    /> */}
                         <BottomNotification 
                             showNotification={this.state.showBottomNotification}
                             //showNotification={true}

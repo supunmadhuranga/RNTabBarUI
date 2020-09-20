@@ -8,6 +8,7 @@ import {
     ScrollView,
     FlatList,
 } from 'react-native';
+import firebase from 'firebase';
 import Animated from 'react-native-reanimated';
 import Sizes from '../styles/sizes';
 import Colors from '../styles/colors';
@@ -24,10 +25,17 @@ import PhotosScreen from './userInfo/Photos';
 import EventsScreen from './userInfo/Events';
 import InfoScreen from './userInfo/Info';
 
+
+import CustomMenu from '../components/CustomMenu';
+// import Menu from '../components/material-menu/Menu';
+// import MenuItem from '../components/material-menu/MenuItem';
+// import MenuDivider  from '../components/material-menu/MenuDivider';
+
 export default class User extends Component {
         constructor(props) {
             super(props);
             this.state = {
+                uid: '',
                 index : 0,
                 routes: [
                     { key: 'first', title: 'Photos' },
@@ -35,6 +43,8 @@ export default class User extends Component {
                     { key: 'third', title: 'Info' },
                 ],
             };
+            
+            //this.userLogOut = this.userLogOut.bind(this);
         }
 
         /* navigation header */
@@ -42,12 +52,33 @@ export default class User extends Component {
             return {
                 headerTitle: '',
                 headerRight: () => ( 
+                    // <View style={{flex:1, justifyContent:'center', height:Sizes.wp('5%'), width:Sizes.wp('10%'), marginRight:Sizes.wp('0%')}}>
+                    //     <TouchableOpacity 
+                    //         onPress={navigation.getParam('_userLogOut')}
+                    //         style={{height:Sizes.wp('10%'), width:Sizes.wp('10%'), justifyContent: 'center', alignItems:'center', borderRadius:Sizes.wp('10%')/2 }}>
+                    //         <Entypo name='dots-three-vertical' size={Sizes.wp('5%')} color={Colors.black} />
+                    //     </TouchableOpacity>
+                    // </View>
+
                     <View style={{flex:1, justifyContent:'center', height:Sizes.wp('5%'), width:Sizes.wp('10%'), marginRight:Sizes.wp('0%')}}>
-                        <TouchableOpacity 
-                            //onPress={() => this.followFunction()}
-                            style={{height:Sizes.wp('10%'), width:Sizes.wp('10%'), justifyContent: 'center', alignItems:'center', borderRadius:Sizes.wp('10%')/2 }}>
-                            <Entypo name='dots-three-vertical' size={Sizes.wp('5%')} color={Colors.black} />
-                        </TouchableOpacity>
+                        <CustomMenu
+                            //Menu Text
+                            menutext="Menu"
+                            //Menu View Style
+                            menustyle={{
+                                marginRight: 16,
+                                flexDirection: 'row',
+                                justifyContent: 'flex-end',
+                            }}
+                            //Menu Text Style
+                            textStyle={{
+                                color: '#000',
+                            }}
+                            //Click functions for the menu items
+                            //option1Click={() => this.userLogOut()}
+                            
+                            option1Click={navigation.getParam('_userLogOut')}
+                        />
                     </View>
                 ),
                 
@@ -60,6 +91,15 @@ export default class User extends Component {
             };
             
         };
+
+        async componentDidMount() {
+            /**
+            * set navigation header refresh function
+            **/
+            this.props.navigation.setParams({
+                _userLogOut: this.userLogOut
+            });
+        }
 
         /* tab change handler start */
         _handleIndexChange = index => this.setState({ index });
@@ -103,11 +143,21 @@ export default class User extends Component {
 
         /* tab change handler end */
 
+        userLogOut = () => {
+            firebase.auth().signOut().then(() => {
+                this.props.navigation.navigate('Auth');
+            })
+            .catch(error => this.setState({ 
+                //errorMessage: error.message 
+            }));
+            console.log('logged out');
+        }
+
         render() {
             
             return (
                 <View style={{flex:1, backgroundColor:Colors.white, paddingTop:Sizes.wp('3%')}}>
-                    
+
                     {/* user image and name*/}
                     <View style={{flexDirection:'row', alignItems:'flex-start', marginLeft:Sizes.wp('10%'), marginBottom:Sizes.wp('12%')}}>
                         <Image
@@ -170,6 +220,8 @@ export default class User extends Component {
                             initialLayout={{ width:Sizes.deviceWidth }}
                         />
                     </View>
+
+                    
                    
                 </View>
             );

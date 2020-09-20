@@ -80,7 +80,7 @@ export default class Notification extends Component {
 
         return (
             <Animated.View style={[ {transform: [{ translateY: positionValue }]}, styles.wrapper]}>
-                <View style={{height:Sizes.hp('15%'), backgroundColor:Colors.white, bottom:0, right:0, left:0, position:'absolute', }}>
+                <View style={{height:Sizes.hp('8%'), backgroundColor:Colors.white, bottom:0, right:0, left:0, position:'absolute', }}>
                     
                         <View style={{alignItems:'center',top:0, paddingRight:Sizes.wp('3%'), paddingLeft:Sizes.wp('3%'), paddingBottom:Sizes.wp('2%')}}>
                             <View style={{ height: 3, width: "100%", backgroundColor: notificationColor, }} />
@@ -88,14 +88,14 @@ export default class Notification extends Component {
                         
                         <View style={{flex:1,  flexDirection:'row', paddingTop:Sizes.wp('1%'), paddingBottom:Sizes.wp('1%'), paddingRight:Sizes.wp('3%'), paddingLeft:Sizes.wp('3%'),}}>
                             <View style={{width:Sizes.wp('80%'),}}>
-                                <Text style={[{color:notificationColor}, styles.errorText]}>{type}</Text>
+                                {/* <Text style={[{color:notificationColor}, styles.errorText]}>{type}</Text> */}
                                 <Text style={styles.errorMessage}>{message}</Text>
                                 {/* <Text style={styles.errorMessage}>this is error message component this is texting message</Text> */}
                             </View>
                             <View style={{flex:1, alignItems:'center', paddingTop:Sizes.wp('0%'), paddingBottom:Sizes.wp('0%')}}>
                                 <Icon 
                                     name={iconName}
-                                    size={Sizes.wp('15%')}
+                                    size={Sizes.wp('8%')}
                                     color={notificationColor}
                                 />
                             </View>
@@ -123,7 +123,7 @@ Notification.propTypes = {
 const styles = StyleSheet.create({
     wrapper: {
         //flex: 1,
-        //backgroundColor:Colors.white,
+        //backgroundColor:'yellow',
         //backgroundColor:'yellow',
         //height:Sizes.hp('15%'),
         // width:Sizes.width,

@@ -4,6 +4,7 @@ import {
     Text,
     AsyncStorage, 
 } from 'react-native';
+import firebase from 'firebase';
 import AppPreLoader from "../components/AppPreLoader";
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator, TransitionPresets, HeaderBackButton } from 'react-navigation-stack';
@@ -15,6 +16,7 @@ import Fonts from '../styles/fonts';
 import StartPage from '../screens/auth/Index';
 import LoginPage from '../screens/auth/Login';
 import SignupPage from '../screens/auth/Signup';
+import ResetPassPage from '../screens/auth/ResetPassword';
 import BottomTabNavigator from '../navigations/BottomTabNavigator';
 //import SlidesPage from './Slides';
 
@@ -31,6 +33,12 @@ const AuthStack =  createStackNavigator(
         },
         Signup: {
             screen: SignupPage,
+            navigationOptions: ({ navigation }) => ({
+                ...TransitionPresets.SlideFromRightIOS,
+            }),
+        },
+        ResetPass: {
+            screen: ResetPassPage,
             navigationOptions: ({ navigation }) => ({
                 ...TransitionPresets.SlideFromRightIOS,
             }),
@@ -77,16 +85,26 @@ class AuthNavigator extends Component {
     //     }
     // }
 
-    checkSession = async() => {
-        const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
-        if (isLoggedIn === '1') {
+    // componentDidMount() {
+    //     firebase.auth().onAuthStateChanged(user => {
+    //       this.props.navigation.navigate(user ? 'Main' : 'SignUp')
+    //     })
+    // }
 
-            this.props.navigation.navigate('App');
+    checkSession = async() => {
+        // const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
+        // if (isLoggedIn === '1') {
+
+        //     this.props.navigation.navigate('App');
             
-        } else {
-            this.props.navigation.navigate('Auth');
-        }
-        //this.props.navigation.navigate(isLoggedIn !== '1'? 'Auth' : 'App');
+        // } else {
+        //     this.props.navigation.navigate('Auth');
+        // }
+
+        firebase.auth().onAuthStateChanged(user => {
+            this.props.navigation.navigate(user ? 'App' : 'Auth');
+        })
+
     }
 
     render() {

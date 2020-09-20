@@ -5,6 +5,7 @@ import {
     StyleSheet,
 } from 'react-native';
 
+import firebase from 'firebase';
 import Sizes from '../../styles/sizes';
 import Colors from '../../styles/colors';
 import Fonts from '../../styles/fonts';
@@ -17,6 +18,7 @@ export default class LoginType extends Component {
         super(props);
         this.state = {
         };
+        this.checkSession();
     }
 
     /**
@@ -32,6 +34,22 @@ export default class LoginType extends Component {
         ),
         
     });
+
+    checkSession = async() => {
+        // const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
+        // if (isLoggedIn === '1') {
+
+        //     this.props.navigation.navigate('App');
+            
+        // } else {
+        //     this.props.navigation.navigate('Auth');
+        // }
+
+        firebase.auth().onAuthStateChanged(user => {
+            this.props.navigation.navigate(user ? 'App' : 'Auth');
+        })
+
+    }
 
     /**
     * navigate to slide show

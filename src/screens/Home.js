@@ -9,6 +9,7 @@ import {
     FlatList,
     TouchableOpacity,
 } from 'react-native';
+import firebase from 'firebase';
 import Sizes from '../styles/sizes';
 import Colors from '../styles/colors';
 import Fonts from '../styles/fonts';
@@ -54,8 +55,9 @@ export default class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            
+            uid: '',
         };
+        this.checkSession();
     }
 
     /* navigation header bar */
@@ -85,6 +87,22 @@ export default class Home extends React.Component {
             }
              
         };  
+    };
+
+    checkSession = async() => {
+        // const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
+        // if (isLoggedIn === '1') {
+
+        //     this.props.navigation.navigate('App');
+            
+        // } else {
+        //     this.props.navigation.navigate('Auth');
+        // }
+
+        firebase.auth().onAuthStateChanged(user => {
+            this.props.navigation.navigate(user ? 'App' : 'Auth');
+        })
+
     };
 
     render() {
