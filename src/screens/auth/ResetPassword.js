@@ -120,6 +120,20 @@ export default class ResetPassword extends Component {
             //load activity indicator
             this.setState({
                 loadResetPass: true,
+            });
+
+            firebase.auth().sendPasswordResetEmail(this.state.email)
+            .then((user) => {
+                this.setState({
+                    loadResetPass: false,
+                    email: '',
+                });
+                this.showNotification('Done', 'Password reset email sent, please check your email...');
+            }).catch(function (error) {
+                this.setState({
+                    loadResetPass: false,
+                });
+                this.showNotification('Error', error);
             })
 
         }
