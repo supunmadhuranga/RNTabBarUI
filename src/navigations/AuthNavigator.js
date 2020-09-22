@@ -67,43 +67,25 @@ class AuthNavigator extends Component {
         super(props);
 
         this.state = {
-            isFirstLaunch: false,
         }
-
-        this.checkSession();
-        //this.checkFirstLaunch();
     }
 
-    // checkFirstLaunch = async() => {
-    //     const isFirstLaunch = await AsyncStorage.getItem("isFirstLaunch");
-    //     if (isFirstLaunch == null) {
-    //         this.setState({
-    //             isFirstLaunch: true,
-    //         })
-    //     } else {
-    //         this.checkSession();
-    //     }
-    // }
+    componentDidMount() {
+        this.props.navigation.navigate('Auth');
+    }
 
-    // componentDidMount() {
-    //     firebase.auth().onAuthStateChanged(user => {
-    //       this.props.navigation.navigate(user ? 'Main' : 'SignUp')
-    //     })
-    // }
+    componentDidMount() {
+        this.checkSession();
+    }
 
     checkSession = async() => {
-        // const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
-        // if (isLoggedIn === '1') {
-
-        //     this.props.navigation.navigate('App');
-            
-        // } else {
-        //     this.props.navigation.navigate('Auth');
-        // }
-
-        firebase.auth().onAuthStateChanged(user => {
-            this.props.navigation.navigate(user ? 'App' : 'Auth');
-        })
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                this.props.navigation.navigate('App');
+            } else {
+                this.props.navigation.navigate('Auth');
+            }
+        });
 
     }
 

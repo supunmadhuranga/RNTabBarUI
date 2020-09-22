@@ -16,11 +16,13 @@ import Sizes from '../../styles/sizes';
 import Colors from '../../styles/colors';
 import Fonts from '../../styles/fonts';
 
+import AppPreLoader from "../../components/AppPreLoader";
 import Ripple from '../../components/react-native-material-ripple/index';
 import BottomNotification from '../../components/BottomNotification';
 import SnackBar from '../../components/snackbar/index';
 
 //import Constants from 'expo-constants';
+import TopImage from '../../../assets/location.png';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createStackNavigator, TransitionPresets, HeaderBackButton } from 'react-navigation-stack';
 
@@ -44,7 +46,7 @@ export default class Login extends Component {
             bottomNotificationMessage:'',
         };
 
-        this.checkSession();
+
     }
 
     /**
@@ -61,18 +63,22 @@ export default class Login extends Component {
         
     });
 
-    checkSession = async() => {
-        // const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
-        // if (isLoggedIn === '1') {
+    componentDidMount() {
+        this.checkSession();
+        this.setState({ 
+            isLoading: false,
+        });
 
-        //     this.props.navigation.navigate('App');
-            
-        // } else {
-        //     this.props.navigation.navigate('Auth');
-        // }
+    }
+
+    checkSession = async() => {
 
         firebase.auth().onAuthStateChanged(user => {
-            this.props.navigation.navigate(user ? 'App' : 'Auth');
+            if (user) {
+                this.props.navigation.navigate('App');
+            } else {
+                this.props.navigation.navigate('Auth');
+            }
         });
     }
 
@@ -187,7 +193,6 @@ export default class Login extends Component {
             if (this.state.emailValidate && this.state.passwordValidate) {
                 firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
                 .then((res) => {
-                    console.log(res)
                     console.log('User logged-in successfully!')
                     this.setState({
                         loadLogin: false,
@@ -218,130 +223,137 @@ export default class Login extends Component {
         }
     }
 
-    // onLoginSuccess = () => {
-    //     this.props.navigation.navigate('App');
-    // }
-
     forgotPassword = () => {
         this.props.navigation.navigate('ResetPass');
     }
 
     render() {
 
-        return (
-            
-                <View style={{flex:1, backgroundColor:Colors.white}}>
-                    {/* <StatusBar style="dark" /> */}
+        if (!this.state.isLoading) {
 
-                    <ScrollView scrollEnabled={false} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'handled'} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }} >
-                    
-                    
-                        <View style={{flex:1, justifyContent:'center', alignItems: 'center'}}>
-                            
-                            <View style={styles.logoContainer}>
-                                {/* <Image source={Logo} style={[{width:this.logoHeight, height:this.logoHeight}]} /> */}
-                            </View>
-                            
-                            <View style={[styles.emailContainer, !this.state.emailValidate? styles.error:null]}>
-                                <Icon name={'email-outline'} size={Sizes.wp('6.2%')} color='#CCC5B9' style={styles.inputIcon} />
-                                <TextInput
-                                    style={styles.inputEmail}
-                                    autoCapitalize = 'none'
-                                    placeholder={'Email'}
-                                    keyboardType="email-address"
-                                    placeholderTextColor='#CCC5B9'
-                                    underlineColorAndroid='transparent'
-                                    onChangeText={(email) => this.validateLogin(email, 'email')}
-                                    onFocus={this.onFocusChange}
-                                    onBlur={this.onBlurChange}
-                                />
-                            </View>
+            return (
+                
+                    <View style={{flex:1, backgroundColor:Colors.white}}>
+                        {/* <StatusBar style="dark" /> */}
 
-                            <View style={[styles.passwordContainer, !this.state.passwordValidate? styles.error:null]}>
-                                <Icon name={'lock-outline'} size={Sizes.wp('6.2%')} color='#CCC5B9' style={styles.inputIcon} />
-                                <TextInput
-                                    style={styles.inputPassword}
-                                    autoCapitalize = 'none'
-                                    placeholder={'Password'}
-                                    secureTextEntry={this.state.hidePass}
-                                    placeholderTextColor='#CCC5B9'
-                                    underlineColorAndroid='transparent'
-                                    onChangeText={(password) => this.validateLogin(password, 'password')}
-                                />
-                                <TouchableOpacity style={styles.btnEye} onPress={this.showPassword.bind(this)} >
-                                    <Icon name={this.state.press == false ? 'eye-off-outline' : 'eye-outline'} size={Sizes.wp('6%')} color='#CCC5B9' />
-                                </TouchableOpacity>
-                            </View>
-
-                            {this.state.loadLogin ? 
-                                <ActivityIndicator color={Colors.main} size={Sizes.wp('8%')} style={{marginTop:Sizes.hp('3%')}} animating /> : 
+                        <ScrollView scrollEnabled={false} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'handled'} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }} >
+                        
+                        
+                            <View style={{flex:1, justifyContent:'center', alignItems: 'center'}}>
                                 
-                                <View>
+                                <View style={styles.logoContainer}>
+                                    <Image source={TopImage} style={{width:Sizes.wp('10%'), height:Sizes.wp('20%')}} />
+                                </View>
+                                
+                                <View style={[styles.emailContainer, !this.state.emailValidate? styles.error:null]}>
+                                    <Icon name={'email-outline'} size={Sizes.wp('6.2%')} color='#CCC5B9' style={styles.inputIcon} />
+                                    <TextInput
+                                        style={styles.inputEmail}
+                                        autoCapitalize = 'none'
+                                        placeholder={'Email'}
+                                        keyboardType="email-address"
+                                        placeholderTextColor='#CCC5B9'
+                                        underlineColorAndroid='transparent'
+                                        onChangeText={(email) => this.validateLogin(email, 'email')}
+                                        onFocus={this.onFocusChange}
+                                        onBlur={this.onBlurChange}
+                                    />
+                                </View>
 
+                                <View style={[styles.passwordContainer, !this.state.passwordValidate? styles.error:null]}>
+                                    <Icon name={'lock-outline'} size={Sizes.wp('6.2%')} color='#CCC5B9' style={styles.inputIcon} />
+                                    <TextInput
+                                        style={styles.inputPassword}
+                                        autoCapitalize = 'none'
+                                        placeholder={'Password'}
+                                        secureTextEntry={this.state.hidePass}
+                                        placeholderTextColor='#CCC5B9'
+                                        underlineColorAndroid='transparent'
+                                        onChangeText={(password) => this.validateLogin(password, 'password')}
+                                    />
+                                    <TouchableOpacity style={styles.btnEye} onPress={this.showPassword.bind(this)} >
+                                        <Icon name={this.state.press == false ? 'eye-off-outline' : 'eye-outline'} size={Sizes.wp('6%')} color='#CCC5B9' />
+                                    </TouchableOpacity>
+                                </View>
+
+                                {this.state.loadLogin ? 
+                                    <ActivityIndicator color={Colors.main} size={Sizes.wp('8%')} style={{marginTop:Sizes.hp('3%')}} animating /> : 
+                                    
+                                    <View>
+
+                                        <Ripple
+                                            style={styles.btnLogin}
+                                            rippleContainerBorderRadius={Sizes.mainItemsRadius}
+                                            rippleDuration={600}
+                                            onPress={() => this.userLogin()}
+                                        >
+                                            <Text style={styles.btnText} >Log in</Text>
+                                        </Ripple>
+                                        
+                                    </View>
+                                }
+
+                                <View>
                                     <Ripple
-                                        style={styles.btnLogin}
+                                        style={styles.btnForgotpw}
                                         rippleContainerBorderRadius={Sizes.mainItemsRadius}
                                         rippleDuration={600}
-                                        onPress={() => this.userLogin()}
+                                        onPress={() => this.forgotPassword()}
                                     >
-                                        <Text style={styles.btnText} >Log in</Text>
+                                        <Text style={{textAlign: 'center', fontFamily:Fonts.mainMedium, color:Colors.error, fontSize: Sizes.wp('3.75%'),}}>Forgot your passsword?</Text>
                                     </Ripple>
-                                    
+
+                                    <Ripple
+                                        style={styles.btnSignup}
+                                        rippleContainerBorderRadius={Sizes.mainItemsRadius}
+                                        rippleDuration={600}
+                                        onPress={() => this.props.navigation.navigate('Signup')}
+                                    >
+                                        <Text style={{textAlign: 'center'}}>
+                                            <Text style={{fontFamily:Fonts.mainMedium, color: '#66615b', fontSize: Sizes.wp('3.75%'),}}>Don't have an account? </Text>
+                                            <Text style={{fontFamily:Fonts.mainMedium, color:Colors.error, fontSize: Sizes.wp('3.75%'),}}>Sign Up</Text>
+                                        </Text>
+                                    </Ripple>
                                 </View>
-                            }
 
-                            <View>
-                                <Ripple
-                                    style={styles.btnForgotpw}
-                                    rippleContainerBorderRadius={Sizes.mainItemsRadius}
-                                    rippleDuration={600}
-                                    onPress={() => this.forgotPassword()}
-                                >
-                                    <Text style={{textAlign: 'center', fontFamily:Fonts.mainMedium, color:Colors.error, fontSize: Sizes.wp('3.75%'),}}>Forgot your passsword?</Text>
-                                </Ripple>
-
-                                <Ripple
-                                    style={styles.btnSignup}
-                                    rippleContainerBorderRadius={Sizes.mainItemsRadius}
-                                    rippleDuration={600}
-                                    onPress={() => this.props.navigation.navigate('Signup')}
-                                >
-                                    <Text style={{textAlign: 'center'}}>
-                                        <Text style={{fontFamily:Fonts.mainMedium, color: '#66615b', fontSize: Sizes.wp('3.75%'),}}>Don't have an account? </Text>
-                                        <Text style={{fontFamily:Fonts.mainMedium, color:Colors.error, fontSize: Sizes.wp('3.75%'),}}>Sign Up</Text>
-                                    </Text>
-                                </Ripple>
                             </View>
+                        </ScrollView>
+                                
 
-                        </View>
-                    </ScrollView>
-                            
-
-                    <View>
-                    {/* <SnackBar
-                        visible={this.state.showBottomNotification}
-                        message={this.state.bottomNotificationMessage}
-                        actionHandler={() => {
-                            console.log("snackbar button clicked!")
-                        }}
-                        action={(
-                            <Icon name="close" size={20} />
-                        )}
-                    /> */}
-                        <BottomNotification 
-                            showNotification={this.state.showBottomNotification}
-                            //showNotification={true}
-                            type={this.state.bottomNotificationType}
-                            //type={'Error'}
+                        <View>
+                        {/* <SnackBar
+                            visible={this.state.showBottomNotification}
                             message={this.state.bottomNotificationMessage}
-                            //message="Error"
-                        />
-                    </View>
+                            actionHandler={() => {
+                                console.log("snackbar button clicked!")
+                            }}
+                            action={(
+                                <Icon name="close" size={20} />
+                            )}
+                        /> */}
+                            <BottomNotification 
+                                showNotification={this.state.showBottomNotification}
+                                //showNotification={true}
+                                type={this.state.bottomNotificationType}
+                                //type={'Error'}
+                                message={this.state.bottomNotificationMessage}
+                                //message="Error"
+                            />
+                        </View>
 
-                </View>
-            //</KeyboardAvoidingView>
-            
-        );
+                    </View>
+                //</KeyboardAvoidingView>
+                
+            );
+        } else {
+            return (
+                <AppPreLoader 
+                    color={Colors.main}
+                    size={Sizes.wp('10%')}
+                    background={false}
+                />
+            );
+        }
       
     }
 }

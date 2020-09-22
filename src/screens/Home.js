@@ -15,6 +15,7 @@ import Colors from '../styles/colors';
 import Fonts from '../styles/fonts';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import AppPreLoader from "../components/AppPreLoader";
 import HorizontalSwipeList from '../components/HorizontalSwipeList';
 
 /* sample image list */
@@ -56,8 +57,8 @@ export default class Home extends React.Component {
         super(props);
         this.state = {
             uid: '',
+            isLoading: true,
         };
-        this.checkSession();
     }
 
     /* navigation header bar */
@@ -89,73 +90,85 @@ export default class Home extends React.Component {
         };  
     };
 
+    componentDidMount() {
+        this.checkSession();
+        this.setState({ 
+            isLoading: false,
+        });
+    }
+
     checkSession = async() => {
-        // const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
-        // if (isLoggedIn === '1') {
-
-        //     this.props.navigation.navigate('App');
-            
-        // } else {
-        //     this.props.navigation.navigate('Auth');
-        // }
-
         firebase.auth().onAuthStateChanged(user => {
-            this.props.navigation.navigate(user ? 'App' : 'Auth');
-        })
-
+            if (user) {
+                this.props.navigation.navigate('App');
+            } else {
+                this.props.navigation.navigate('Auth');
+            }
+        });
     };
 
     render() {
-        return (
-            <View style={{flex:1, backgroundColor:Colors.white}}>
-                
-                <View style={{flex:1, justifyContent:'space-between'}}>
 
-                    {/* first swipe list */}
-                    <View>
-                        <View style={{marginLeft:Sizes.wp('4%'), marginRight:Sizes.wp('4%'), marginTop:Sizes.wp('4%'), marginBottom:Sizes.wp('2%')}}>
-                            <Text style={{fontFamily:Fonts.main, fontSize:Sizes.wp('3.5%')}}>Friends</Text>
-                        </View>
+        if(!this.state.isLoading) {
+            return (
+                <View style={{flex:1, backgroundColor:Colors.white}}>
+                    
+                    <View style={{flex:1, justifyContent:'space-between'}}>
 
+                        {/* first swipe list */}
                         <View>
-                        {/* dynamic swipe list */}
-                            <HorizontalSwipeList 
-                                dataArray={ENTRIES1}
-                                listType='image'
-                            />
-                        </View>
-                    </View>
+                            <View style={{marginLeft:Sizes.wp('4%'), marginRight:Sizes.wp('4%'), marginTop:Sizes.wp('4%'), marginBottom:Sizes.wp('2%')}}>
+                                <Text style={{fontFamily:Fonts.main, fontSize:Sizes.wp('3.5%')}}>Friends</Text>
+                            </View>
 
-                    {/* second swipe list */}
-                    <View>
-                        <View style={{marginLeft:Sizes.wp('4%'), marginRight:Sizes.wp('4%'), marginTop:Sizes.wp('7%'), marginBottom:Sizes.wp('2%')}}>
-                            <Text style={{fontFamily:Fonts.main, fontSize:Sizes.wp('3.5%')}}>You might like</Text>
+                            <View>
+                            {/* dynamic swipe list */}
+                                <HorizontalSwipeList 
+                                    dataArray={ENTRIES1}
+                                    listType='image'
+                                />
+                            </View>
                         </View>
-                        <View style={{}}>
-                        {/* dynamic swipe list */}
-                            <HorizontalSwipeList 
-                                dataArray={ENTRIES1}
-                                listType='image'
-                            />
-                        </View>
-                    </View>
 
-                    {/* third swipe list */}
-                    <View>
-                        <View style={{marginLeft:Sizes.wp('4%'), marginRight:Sizes.wp('4%'), marginTop:Sizes.wp('7%'), marginBottom:Sizes.wp('2%')}}>
-                            <Text style={{fontFamily:Fonts.main, fontSize:Sizes.wp('3.5%')}}>Categories</Text>
+                        {/* second swipe list */}
+                        <View>
+                            <View style={{marginLeft:Sizes.wp('4%'), marginRight:Sizes.wp('4%'), marginTop:Sizes.wp('7%'), marginBottom:Sizes.wp('2%')}}>
+                                <Text style={{fontFamily:Fonts.main, fontSize:Sizes.wp('3.5%')}}>You might like</Text>
+                            </View>
+                            <View style={{}}>
+                            {/* dynamic swipe list */}
+                                <HorizontalSwipeList 
+                                    dataArray={ENTRIES1}
+                                    listType='image'
+                                />
+                            </View>
                         </View>
-                        <View style={{marginBottom:Sizes.wp('5%')}}>
-                        {/* dynamic swipe list */}
-                            <HorizontalSwipeList 
-                                dataArray={ENTRIES1}
-                                listType='icon'
-                            />
-                        </View>
-                    </View>
 
+                        {/* third swipe list */}
+                        <View>
+                            <View style={{marginLeft:Sizes.wp('4%'), marginRight:Sizes.wp('4%'), marginTop:Sizes.wp('7%'), marginBottom:Sizes.wp('2%')}}>
+                                <Text style={{fontFamily:Fonts.main, fontSize:Sizes.wp('3.5%')}}>Categories</Text>
+                            </View>
+                            <View style={{marginBottom:Sizes.wp('5%')}}>
+                            {/* dynamic swipe list */}
+                                <HorizontalSwipeList 
+                                    dataArray={ENTRIES1}
+                                    listType='icon'
+                                />
+                            </View>
+                        </View>
+
+                    </View>
                 </View>
-            </View>
-        );
+            );
+        } else {
+            return (
+                <AppPreLoader 
+                    color={Colors.main}
+                    size={Sizes.wp('10%')}
+                    background={false}
+                />
+            );
+        }
     }
 }

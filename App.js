@@ -22,13 +22,11 @@ import Colors from './src/styles/colors';
 import Sizes from './src/styles/sizes';
 
 import AppPreLoader from "./src/components/AppPreLoader";
-import Navigator from './src/navigations/BottomTabNavigator';
-//import AuthNavigator from './src/screens/auth/Login';
+//import AuthNavigator from './src/screens/auth/Signup';
 import AuthNavigator from './src/navigations/AuthNavigator';
-import Home from './src/screens/Home';
 
-//console.reportErrorsAsExceptions = false;
-//console.disableYellowBox = true;
+console.reportErrorsAsExceptions = false;
+console.disableYellowBox = true;
 
 export default class App extends React.Component {
 

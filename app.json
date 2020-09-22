@@ -31,6 +31,7 @@
             ]
         },
         "ios": {
+            "bundleIdentifier": "com.nexmatrixlab.travelmedia",
             "supportsTablet": true
         },
         "web": {
