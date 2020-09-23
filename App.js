@@ -10,14 +10,6 @@ import {
 import * as firebase from 'firebase';
 import firebaseApi from './src/config/firebase';
 
-import {
-    SafeAreaView,
-    SafeAreaProvider,
-    SafeAreaInsetsContext,
-    useSafeAreaInsets,
-    initialWindowMetrics,
-} from 'react-native-safe-area-context';
-
 //import LoadFirebase from './src/config/firebase';
 import * as Font from 'expo-font';
 import Colors from './src/styles/colors';
