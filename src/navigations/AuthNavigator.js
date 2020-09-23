@@ -4,7 +4,7 @@ import {
     Text,
     AsyncStorage, 
 } from 'react-native';
-import firebase from 'firebase';
+import * as firebase from 'firebase';
 import AppPreLoader from "../components/AppPreLoader";
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator, TransitionPresets, HeaderBackButton } from 'react-navigation-stack';
@@ -71,11 +71,8 @@ class AuthNavigator extends Component {
     }
 
     componentDidMount() {
-        this.props.navigation.navigate('Auth');
-    }
-
-    componentDidMount() {
         this.checkSession();
+        //this.props.navigation.navigate('Auth');
     }
 
     checkSession = async() => {
@@ -86,7 +83,6 @@ class AuthNavigator extends Component {
                 this.props.navigation.navigate('Auth');
             }
         });
-
     }
 
     render() {

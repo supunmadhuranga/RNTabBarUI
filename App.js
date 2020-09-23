@@ -7,6 +7,8 @@ import {
     Platform,
     TextInput,
 } from 'react-native';
+import * as firebase from 'firebase';
+import firebaseApi from './src/config/firebase';
 
 import {
     SafeAreaView,
@@ -16,7 +18,7 @@ import {
     initialWindowMetrics,
 } from 'react-native-safe-area-context';
 
-import LoadFirebase from './src/config/firebase';
+//import LoadFirebase from './src/config/firebase';
 import * as Font from 'expo-font';
 import Colors from './src/styles/colors';
 import Sizes from './src/styles/sizes';
@@ -27,6 +29,7 @@ import AuthNavigator from './src/navigations/AuthNavigator';
 
 console.reportErrorsAsExceptions = false;
 console.disableYellowBox = true;
+//console.ignoredYellowBox = ['Setting a timer'];
 
 export default class App extends React.Component {
 
@@ -41,6 +44,12 @@ export default class App extends React.Component {
         Text.defaultProps.allowFontScaling = false;
         if (TextInput.defaultProps == null) TextInput.defaultProps = {};
         TextInput.defaultProps.allowFontScaling = false;
+
+        //Initialize firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseApi.firebaseConfig);
+        }
+        
 
     }
 
