@@ -56,9 +56,13 @@ export default class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            uid: '',
+            //uid: '',
             isLoading: true,
         };
+
+        console.ignoredYellowBox = [
+            'Setting a timer'
+        ];
     }
 
     /* navigation header bar */
@@ -91,25 +95,25 @@ export default class Home extends React.Component {
     };
 
     componentDidMount() {
-        this.checkSession();
+        //this.checkSession();
         this.setState({ 
             isLoading: false,
         });
     }
 
-    checkSession = async() => {
-        firebase.auth().onAuthStateChanged(user => {
-            if (user) {
-                this.props.navigation.navigate('App');
-            } else {
-                this.props.navigation.navigate('Auth');
-            }
-        });
-    };
+    // checkSession = async() => {
+    //     firebase.auth().onAuthStateChanged(user => {
+    //         if (user) {
+    //             this.props.navigation.navigate('App');
+    //         } else {
+    //             this.props.navigation.navigate('Auth');
+    //         }
+    //     });
+    // };
 
     render() {
 
-        if(!this.state.isLoading) {
+        if (!this.state.isLoading) {
             return (
                 <View style={{flex:1, backgroundColor:Colors.white}}>
                     

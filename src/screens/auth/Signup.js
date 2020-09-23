@@ -7,13 +7,20 @@ import {
     TouchableOpacity,
     ActivityIndicator,
     Image,
+    ScrollView,
+    KeyboardAvoidingView,
+    Platform,
 } from 'react-native';
-import firebase from 'firebase';
+import * as firebase from 'firebase';
+//import 'firebase/firestore';
+import '@firebase/auth';
+import '@firebase/firestore';
 
 import Sizes from '../../styles/sizes';
 import Colors from '../../styles/colors';
 import Fonts from '../../styles/fonts';
 
+import BottomNotification from '../../components/BottomNotification';
 import AppPreLoader from "../../components/AppPreLoader";
 import TopImage from '../../../assets/location.png';
 import Ripple from '../../components/react-native-material-ripple/index';
@@ -43,6 +50,10 @@ export default class Signup extends Component {
             bottomNotificationType:'',
             bottomNotificationMessage:'',
         };
+
+        console.ignoredYellowBox = [
+            'Setting a timer'
+        ];
     }
 
     /**
@@ -56,25 +67,51 @@ export default class Signup extends Component {
         headerRight: () => (
             <View />
         ),
+        // headerStyle: {
+        //     backgroundColor:Colors.white,
+        //     elevation: 0,
+        //     shadowOpacity: 0,
+        // },
         
     });
 
     componentDidMount() {
-        this.checkSession();
+        //this.checkSession();
         this.setState({ 
             isLoading: false,
         });
     }
 
-    checkSession = async() => {
-        firebase.auth().onAuthStateChanged(user => {
-            if (user) {
-                this.props.navigation.navigate('App');
-            } else {
-                this.props.navigation.navigate('Auth');
-            }
-        });
-    };
+    // checkSession = async() => {
+    //     firebase.auth().onAuthStateChanged(user => {
+    //         if (user) {
+    //             this.props.navigation.navigate('App');
+    //         } else {
+    //             this.props.navigation.navigate('Auth');
+    //         }
+    //     });
+    // };
+
+    showNotification = (type, message) => {
+        if (!this.state.showBottomNotification) {
+            this.setState({
+                showBottomNotification:true,
+                bottomNotificationType:type,
+                bottomNotificationMessage:message,
+            })
+            setTimeout(() => {
+                this.hideNotification()
+            },  3000)
+        }
+    }
+
+    hideNotification = () => {
+        this.setState({
+            showBottomNotification:false,
+            bottomNotificationType:'',
+            bottomNotificationMessage:'',
+        })
+    }
 
     showPassword = () => {
         if (this.state.press == false) {
@@ -94,10 +131,17 @@ export default class Signup extends Component {
 
         if (type == 'name') {
 
-            this.setState({
-                nameValidate: true,
-                name: input,
-            })
+            const alph=/^[a-zA-Z ]{2,30}$/;
+            if (alph.test(input) && input.length > 0) {
+                this.setState({
+                    nameValidate: true,
+                    name: input,
+                })
+            } else {
+                this.setState({
+                    nameValidate: false,
+                })
+            }
 
         }  
 
@@ -119,10 +163,17 @@ export default class Signup extends Component {
 
         if (type == 'username') {
 
-            this.setState({
-                usernameValidate: true,
-                username: input,
-            })
+            const alph=/^[a-zA-Z ]{2,30}$/;
+            if (alph.test(input) && input.length > 0) {
+                this.setState({
+                    usernameValidate: true,
+                    username: input,
+                })
+            } else {
+                this.setState({
+                    usernameValidate: false,
+                })
+            }
 
         }
         
@@ -142,7 +193,7 @@ export default class Signup extends Component {
 
     }
 
-    userSignup = () => {
+    userSignup = async() => {
 
         if (this.state.isConnected) {
 
@@ -153,7 +204,8 @@ export default class Signup extends Component {
                     error: true,
                     errorMsg: 'Invalid name',
                     loadSignup: false,
-                })
+                });
+                this.showNotification('Error', 'Invalid name');
                 console.log('Error', 'Invalid name');
                 return;
             }
@@ -162,9 +214,10 @@ export default class Signup extends Component {
                 this.setState({
                     emailValidate: false,
                     error: true,
-                    errorMsg: 'Invalid username',
+                    errorMsg: 'Invalid email',
                     loadSignup: false,
-                })
+                });
+                this.showNotification('Error', 'Invalid email');
                 console.log('Error', 'Invalid email');
                 return;
             }
@@ -175,7 +228,8 @@ export default class Signup extends Component {
                     error: true,
                     errorMsg: 'Invalid username',
                     loadSignup: false,
-                })
+                });
+                this.showNotification('Error', 'Invalid username');
                 console.log('Error', 'Invalid username');
                 return;
             }
@@ -187,7 +241,8 @@ export default class Signup extends Component {
                     errorMsg: 'Invalid password',
                     loadSignup: false,
                     
-                })
+                });
+                this.showNotification('Error', 'Invalid password');
                 console.log('Error', 'Invalid password');
                 return;
             }
@@ -197,16 +252,42 @@ export default class Signup extends Component {
                 loadSignup: true,
             })
 
-            firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
-            .then((res) => {
-                this.props.navigation.navigate('Auth');
-                // res.user.updateProfile({
-                //     displayName: this.state.name,
-                // });
-
-            })
-            .catch(error => this.setState({ errorMsg: error.message }));
-
+            firebase
+                .auth()
+                .createUserWithEmailAndPassword(this.state.email, this.state.password)
+                .then((response) => {
+                    const data = {
+                        id: response.user.uid,
+                        name: this.state.name,
+                        email: this.state.email,
+                        username: this.state.username,
+                        image: '',
+                    };
+                    const usersRef = firebase.firestore().collection('users')
+                    usersRef
+                    .doc(response.user.uid)
+                    .set(data)
+                    .then(() => {
+                        this.setState({
+                            loadSignup: false,
+                        });
+                        this.showNotification('Done', 'Signup successfully');
+                    })
+                    .catch((error) => {
+                        this.setState({
+                            loadSignup: false,
+                        });
+                        this.showNotification('Error', error.message);
+                        console.log(error);
+                    });
+                })
+                .catch((error) => {
+                    this.setState({
+                        loadSignup: false,            
+                    });
+                    this.showNotification('Error', error.message);
+                    console.log(error);
+            });
 
         }
 
@@ -215,85 +296,131 @@ export default class Signup extends Component {
     render() {
 
         if (!this.state.isLoading) {
+
             return (
-                <View style={{flex:1, backgroundColor:Colors.white, justifyContent:'center', alignItems: 'center'}}>
+                
+                <View style={{flex:1, backgroundColor:Colors.white}}>
                     
-                    <View style={styles.logoContainer}>
-                        <Image source={TopImage} style={{width:Sizes.wp('10%'), height:Sizes.wp('20%')}} />
-                    </View>
+                    <ScrollView scrollEnabled={false} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'handled'} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }} >
                     
-                    <View style={[styles.emailContainer, ]}>
-                        <Icon name={'account-circle-outline'} size={Sizes.wp('6.2%')} color='#CCC5B9' style={styles.inputIcon} />
-                        <TextInput
-                            style={styles.inputEmail}
-                            autoCapitalize = 'none'
-                            placeholder={'Name'}
-                            placeholderTextColor='#CCC5B9'
-                            underlineColorAndroid='transparent'
-                            onChangeText={(name) => this.validateSignup(name, 'name')}
-                            onFocus={this.onFocusChange}
-                            onBlur={this.onBlurChange}
+                        <View style={{flex:1, alignItems: 'center'}}>
+
+                            <View style={styles.logoContainer}>
+                                <Image source={TopImage} style={{width:Sizes.wp('10%'), height:Sizes.wp('20%')}} />
+                            </View>
+                            
+                            <View style={[styles.emailContainer, !this.state.nameValidate? styles.error:null]}>
+                                <Icon name={'account-circle-outline'} size={Sizes.wp('6.2%')} color='#CCC5B9' style={styles.inputIcon} />
+                                <TextInput
+                                    style={styles.inputEmail}
+                                    autoCapitalize = 'none'
+                                    placeholder={'Name'}
+                                    placeholderTextColor='#CCC5B9'
+                                    underlineColorAndroid='transparent'
+                                    onChangeText={(name) => this.validateSignup(name, 'name')}
+                                    onFocus={this.onFocusChange}
+                                    onBlur={this.onBlurChange}
+                                />
+                            </View>
+
+                            <View style={[styles.emailContainer, !this.state.emailValidate? styles.error:null]}>
+                                <Icon name={'email-outline'} size={Sizes.wp('6.2%')} color='#CCC5B9' style={styles.inputIcon} />
+                                <TextInput
+                                    style={styles.inputEmail}
+                                    autoCapitalize = 'none'
+                                    placeholder={'Email'}
+                                    keyboardType="email-address"
+                                    placeholderTextColor='#CCC5B9'
+                                    underlineColorAndroid='transparent'
+                                    onChangeText={(email) => this.validateSignup(email, 'email')}
+                                    onFocus={this.onFocusChange}
+                                    onBlur={this.onBlurChange}
+                                />
+                            </View>
+
+                            <View style={[styles.emailContainer, !this.state.usernameValidate? styles.error:null]}>
+                                <Icon name={'account-outline'} size={Sizes.wp('6.2%')} color='#CCC5B9' style={styles.inputIcon} />
+                                <TextInput
+                                    style={styles.inputEmail}
+                                    autoCapitalize = 'none'
+                                    placeholder={'Username'}
+                                    placeholderTextColor='#CCC5B9'
+                                    underlineColorAndroid='transparent'
+                                    onChangeText={(username) => this.validateSignup(username, 'username')}
+                                    onFocus={this.onFocusChange}
+                                    onBlur={this.onBlurChange}
+                                />
+                            </View>
+
+                            <View style={[styles.passwordContainer, !this.state.passwordValidate? styles.error:null]}>
+                                <Icon name={'lock-outline'} size={Sizes.wp('6.2%')} color='#CCC5B9' style={styles.inputIcon} />
+                                <TextInput
+                                    style={styles.inputPassword}
+                                    autoCapitalize = 'none'
+                                    placeholder={'Password'}
+                                    secureTextEntry={this.state.hidePass}
+                                    placeholderTextColor='#CCC5B9'
+                                    underlineColorAndroid='transparent'
+                                    onChangeText={(password) => this.validateSignup(password, 'password')}
+                                />
+                                <TouchableOpacity style={styles.btnEye} onPress={this.showPassword.bind(this)} >
+                                    <Icon name={this.state.press == false ? 'eye-off-outline' : 'eye-outline'} size={Sizes.wp('6%')} color='#CCC5B9' />
+                                </TouchableOpacity>
+                            </View>
+
+                            {this.state.loadSignup ? 
+                                <ActivityIndicator color={Colors.main} size={Sizes.wp('8%')} style={{marginTop:Sizes.hp('3%')}} animating /> : 
+                                <Ripple
+                                    style={styles.btnLogin}
+                                    rippleContainerBorderRadius={Sizes.mainItemsRadius}
+                                    rippleDuration={600}
+                                    onPress={() => this.userSignup()}
+                                >
+                                    <Text style={styles.btnText} >Sign up</Text>
+                                </Ripple>
+                            }
+                            <View>
+                                <Ripple
+                                    style={styles.btnNavLogin}
+                                    rippleContainerBorderRadius={Sizes.mainItemsRadius}
+                                    rippleDuration={600}
+                                    onPress={() => this.props.navigation.navigate('Login')}
+                                >
+                                    <Text style={{textAlign: 'center'}}>
+                                        <Text style={{fontFamily:Fonts.mainMedium, color: '#66615b', fontSize: Sizes.wp('3.75%'),}}>Already have an account? </Text>
+                                        <Text style={{fontFamily:Fonts.mainMedium, color:Colors.error, fontSize: Sizes.wp('3.75%'),}}>Login</Text>
+                                    </Text>
+                                </Ripple>
+                            </View>
+
+                        </View>
+                        
+                    </ScrollView>
+                    
+                    <View>
+                        {/* <SnackBar
+                            visible={this.state.showBottomNotification}
+                            message={this.state.bottomNotificationMessage}
+                            actionHandler={() => {
+                                console.log("snackbar button clicked!")
+                            }}
+                            action={(
+                                <Icon name="close" size={20} />
+                            )}
+                        /> */}
+                        <BottomNotification 
+                            showNotification={this.state.showBottomNotification}
+                            //showNotification={true}
+                            type={this.state.bottomNotificationType}
+                            //type={'Error'}
+                            message={this.state.bottomNotificationMessage}
+                            //message="Error"
                         />
                     </View>
-
-                    <View style={[styles.emailContainer, ]}>
-                        <Icon name={'email-outline'} size={Sizes.wp('6.2%')} color='#CCC5B9' style={styles.inputIcon} />
-                        <TextInput
-                            style={styles.inputEmail}
-                            autoCapitalize = 'none'
-                            placeholder={'Email'}
-                            keyboardType="email-address"
-                            placeholderTextColor='#CCC5B9'
-                            underlineColorAndroid='transparent'
-                            onChangeText={(email) => this.validateSignup(email, 'email')}
-                            onFocus={this.onFocusChange}
-                            onBlur={this.onBlurChange}
-                        />
-                    </View>
-
-                    <View style={[styles.emailContainer, ]}>
-                        <Icon name={'account-outline'} size={Sizes.wp('6.2%')} color='#CCC5B9' style={styles.inputIcon} />
-                        <TextInput
-                            style={styles.inputEmail}
-                            autoCapitalize = 'none'
-                            placeholder={'Username'}
-                            placeholderTextColor='#CCC5B9'
-                            underlineColorAndroid='transparent'
-                            onChangeText={(username) => this.validateSignup(username, 'username')}
-                            onFocus={this.onFocusChange}
-                            onBlur={this.onBlurChange}
-                        />
-                    </View>
-
-                    <View style={[styles.passwordContainer, !this.state.passwordValidate? styles.error:null]}>
-                        <Icon name={'lock-outline'} size={Sizes.wp('6.2%')} color='#CCC5B9' style={styles.inputIcon} />
-                        <TextInput
-                            style={styles.inputPassword}
-                            autoCapitalize = 'none'
-                            placeholder={'Password'}
-                            secureTextEntry={this.state.hidePass}
-                            placeholderTextColor='#CCC5B9'
-                            underlineColorAndroid='transparent'
-                            onChangeText={(password) => this.validateSignup(password, 'password')}
-                        />
-                        <TouchableOpacity style={styles.btnEye} onPress={this.showPassword.bind(this)} >
-                            <Icon name={this.state.press == false ? 'eye-off-outline' : 'eye-outline'} size={Sizes.wp('6%')} color='#CCC5B9' />
-                        </TouchableOpacity>
-                    </View>
-
-                    {this.state.loadSignup ? 
-                        <ActivityIndicator color={Colors.main} size={Sizes.wp('8%')} style={{marginTop:Sizes.hp('3%')}} animating /> : 
-                        <Ripple
-                            style={styles.btnLogin}
-                            rippleContainerBorderRadius={Sizes.mainItemsRadius}
-                            rippleDuration={600}
-                            onPress={() => this.userSignup()}
-                        >
-                            <Text style={styles.btnText} >Sign up</Text>
-                        </Ripple>
-                    }
                     
                 </View>
+                
+                
             );
         } else {
             return (
@@ -310,8 +437,9 @@ export default class Signup extends Component {
 const styles = StyleSheet.create({
     logoContainer: {
         alignItems: 'center',
+        marginTop:Sizes.hp('10%'),
         marginBottom:Sizes.hp('5%'),
-        marginTop:Sizes.hp('5%'),
+        //marginTop:Sizes.hp('5%'),
     },
     emailContainer: {
         marginTop:Sizes.hp('1.7%'),
@@ -371,10 +499,29 @@ const styles = StyleSheet.create({
         marginTop: Sizes.hp('3%'),
         marginBottom: Sizes.hp('3%'),
     },
+    btnNavLogin: {
+        width:Sizes.deviceWidth - 55,
+        height:Sizes.hp('7%'),
+        alignSelf: 'center',
+        borderRadius: Sizes.mainItemsRadius,
+        justifyContent: 'center',
+        marginBottom: Sizes.hp('1.7%'),
+    },
     btnText: {
         color: Colors.white,
         fontSize: Sizes.wp('3.75%'),
         textAlign: 'center',
         fontFamily:Fonts.mainMedium,
+    },
+    error: {
+        borderWidth: 1,
+        borderColor: '#EB5E28',
+    },
+    errorText: {
+        marginTop:Sizes.hp('3%'),
+        color: '#EB5E28',
+        fontSize:Sizes.wp('3.75%'),
+        textAlign: 'center',
+        fontFamily:Fonts.main,
     },
 });
