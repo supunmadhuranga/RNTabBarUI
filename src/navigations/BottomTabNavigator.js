@@ -14,6 +14,10 @@ import HomeScreen from '../screens/Home';
 import MapScreen from '../screens/Map';
 import UserScreen from '../screens/User';
 
+//import selectPhotoScreen from '../utils/selectPhoto_old';
+import SelectNewPost from '../utils/NewPost';
+import UserPosts from '../screens/userInfo/UserPosts';
+
 /* bottom tab screens set*/
 const ScreenHome = createStackNavigator ({
     screen: HomeScreen,
@@ -23,10 +27,31 @@ const ScreenMap = createStackNavigator ({
     screen: MapScreen,
 });
 
-const ScreenUser = createStackNavigator ({
-    screen: UserScreen,
-});
+// const ScreenUser = createStackNavigator ({
+//     screen: UserScreen,
+// });
 
+const ScreenUser = createStackNavigator (
+    {
+        UserScreen: {
+            screen: UserScreen,
+        },
+        NewPostScreen: {
+            screen: SelectNewPost
+        },
+        UserPostsScreen: {
+            screen: UserPosts,
+            // navigationOptions: ({ navigation }) => ({
+            //     ...TransitionPresets.SlideFromRightIOS,
+            // }),
+        },
+    },
+    {
+        initialRouteName: 'UserScreen',
+        //headerLayoutPreset: "center",
+        //headerMode: 'none'
+    }
+);
 
 const bottomTabNavigator = createBottomTabNavigator(
     {   

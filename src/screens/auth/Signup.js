@@ -262,8 +262,12 @@ export default class Signup extends Component {
                         email: this.state.email,
                         username: this.state.username,
                         image: '',
+                        followed_count: 0,
+                        follower_count: 0,
+                        post_count: 0,
+                        active:1,
                     };
-                    const usersRef = firebase.firestore().collection('users')
+                    const usersRef = firebase.firestore().collection('users');
                     usersRef
                     .doc(response.user.uid)
                     .set(data)

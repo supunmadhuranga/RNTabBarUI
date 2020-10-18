@@ -24,6 +24,10 @@
             "package": "com.nexmatrixlab.travelmedia",
             "versionCode": 6,
             "permissions": [
+                "Permissions.CAMERA",
+                "Permissions.CAMERA_ROLL",
+                "permissions.READ_INTERNAL_STORAGE",
+                "permissions.WRITE_EXTERNAL_STORAGE",
                 "Permissions.NOTIFICATIONS",
                 "Permissions.ACCESS_NETWORK_STATE",
                 "Permissions.ACCESS_COARSE_LOCATION",
