@@ -16,6 +16,7 @@ import UserScreen from '../screens/User';
 
 //import selectPhotoScreen from '../utils/selectPhoto_old';
 import SelectNewPost from '../utils/NewPost';
+import CreateNewEvent from '../utils/event/Index';
 import UserPosts from '../screens/userInfo/UserPosts';
 
 /* bottom tab screens set*/
@@ -38,6 +39,14 @@ const ScreenUser = createStackNavigator (
         },
         NewPostScreen: {
             screen: SelectNewPost
+        },
+        NewEventScreen: {
+            screen: CreateNewEvent,
+            navigationOptions: ({ navigation }) => ({
+                //...TransitionPresets.SlideFromRightIOS,
+                headerShown:false,
+            }),
+            
         },
         UserPostsScreen: {
             screen: UserPosts,

@@ -18,6 +18,8 @@ import Colors from '../../styles/colors';
 import Fonts from '../../styles/fonts';
 import {FontAwesome5, SimpleLineIcons, Ionicons, MaterialCommunityIcons, AntDesign} from 'react-native-vector-icons';
 
+import * as ApiMethods from "../../config/Api";
+
 const gallery = [
     {
         uri: 'https://i.picsum.photos/id/176/200/300.jpg?hmac=FVhRySTQhcAO5Xvxk6nE-bMsJSyIAW8Uw6zWgAh9hzY'
@@ -40,16 +42,52 @@ const gallery = [
 class Photos extends Component {
     constructor(props) {
         super(props);
-
+        _isMounted = false;
         const itemSize = (Sizes.deviceWidth - 12) / 3
 
         this.state = {
-            galleryData: gallery,
+            galleryData: null,
             itemSize,
             totalPosts: gallery.length,
 
         };
         
+    }
+
+    async componentDidMount() {
+        this._isMounted = true;
+
+        /*set navigation header function*/
+        // this.props.navigation.setParams({
+        //     _postFeed: this.postFeed
+        // });
+
+        this._isMounted && this.getUserPosts();
+
+        const { navigation } = this.props;
+        this.focusListener = navigation.addListener('didFocus', () => {
+            this._isMounted && this.getUserPosts();
+        });
+
+    }
+
+    getUserPosts = async() => {
+        let results = await ApiMethods.fetchUserPosts();
+
+        if (results) {
+            this._isMounted && this.setState({
+                galleryData: results,
+            });
+        } else {
+            console.log("fetch results error");
+        }
+        
+        
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+        //this.unsubscribe();
     }
 
     addPost = async() => {
@@ -61,14 +99,16 @@ class Photos extends Component {
         return (
             <View style={{}}>
                 
-                <TouchableOpacity onPress={() => this.props.navigation.navigate("UserPostsScreen")}>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate("UserPostsScreen", {postIndex:index})}>
                     <Image
+                        //resizeMode='cover'
                         style={{
                             width: this.state.itemSize,
                             height: this.state.itemSize,
                             margin: 1.5
                         }}
-                        source={item}
+                        source={{uri:item.path}}
+
                     />
                 </TouchableOpacity>
                 
@@ -93,7 +133,7 @@ class Photos extends Component {
                 <FlatList
                     data={this.state.galleryData}
                     numColumns={3}
-                    keyExtractor={this.extractItemKey}
+                    keyExtractor={(item, index) => index.toString()}
                     renderItem={this.renderItem}
                 />
             </View>

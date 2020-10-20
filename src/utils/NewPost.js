@@ -52,7 +52,7 @@ export default class NewPost extends Component {
                 
                 <View style={{flexDirection:'row'}}>
                     <TouchableOpacity onPress={navigation.getParam('_postFeed')} style={{flex:1, justifyContent:'center', alignItems:"center", height:Sizes.wp('5%'), width:Sizes.wp('10%'), marginRight:Sizes.wp('4%')}}>
-                        <Text style={{alignSelf:'center', fontSize:Sizes.wp('4.5%'), fontSize:Sizes.wp('4.5%'), }}>Post</Text>
+                        <Text style={{alignSelf:'center', fontFamily:Fonts.mainMedium, fontSize:Sizes.wp('4.5%'), }}>Post</Text>
                     </TouchableOpacity>
                 </View>
             ),
@@ -137,6 +137,9 @@ export default class NewPost extends Component {
             })
             this.props.navigation.navigate("UserScreen");
         } else {
+            this._isMounted && this.setState({
+                spinner: false,
+            })
             console.log("error uploading post new post screen");
         }
     }

@@ -127,6 +127,23 @@ export const updateUserInfo = async(field, value) => {
 //         );
 // }
 
+export const fetchUserPosts = async() => {
+    let user = firebase.auth().currentUser;
+    return firebase
+      .firestore()
+      .collection('posts')
+      .where('uid', '==', user.uid)
+      .get()
+      .then(function(querySnapshot) {
+        let posts = querySnapshot.docs.map(doc => doc.data())
+        return posts;
+      })
+      .catch(function(error) {
+        console.log('Error getting documents: ', error)
+        return error;
+      })
+}
+
 const uploadPhotoAsync = async(local_uri, filename) => {
 
     return new Promise(async (res, rej) => {
@@ -177,23 +194,45 @@ export const addPost = async(text, localUri) => {
     //         )
     // });
 
-    return firebase
+    // return firebase
+    //     .firestore()
+    //     .collection('posts')
+    //     .add({
+    //         uid: user.uid,
+    //         caption: text,
+    //         path: remote_url,
+    //         date_created: timestamp,
+    //         date_updated: timestamp,
+    //     }).then(
+    //         (res) => {
+    //             return true;
+    //         }
+    //     )
+    //     .catch(function(error) {
+    //         return false;
+    //         console.log('Error getting : ', error);
+    //     })
+    
+    var newRef =  firebase
         .firestore()
         .collection('posts')
-        .add({
+        .doc()
+
+    return newRef.set({
+            id: newRef.id,
             uid: user.uid,
             caption: text,
             path: remote_url,
             date_created: timestamp,
             date_updated: timestamp,
-        }).then(
-            (res) => {
-                return true;
-            }
-        )
-        .catch(function(error) {
+        })
+        .then((res) => {
+            console.log('posted');
+            return true;
+        })
+        .catch((error) => {
+            console.log('Error getting documents: ', error);
             return false;
-            console.log('Error getting : ', error);
         })
 
 }
