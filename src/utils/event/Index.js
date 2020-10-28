@@ -2,13 +2,21 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { createStackNavigator, TransitionPresets, HeaderBackButton } from 'react-navigation-stack';
 
-import CreateEvent from './NewEvent';
+import CreateEventStepOne from './NewEventStepOne';
+import CreateEventStepTwo from './NewEventStepTwo';
+import CreateEventStepThree from './NewEventStepThree';
 //import DetailsPage from './Details';
 
 export default createStackNavigator(
     {   
-        CreateEventScreen: {
-            screen: CreateEvent,
+        CreateEventStepOne: {
+            screen: CreateEventStepOne,
+        },
+        CreateEventStepTwo: {
+            screen: CreateEventStepTwo,
+        },
+        CreateEventStepThree: {
+            screen: CreateEventStepThree,
         },
         // ViewInvoice: {
         //     screen: DetailsPage,
@@ -19,7 +27,7 @@ export default createStackNavigator(
 
     },
     {
-        initialRouteName: 'CreateEventScreen',
+        initialRouteName: 'CreateEventStepOne',
         //headerLayoutPreset: "center",
         //headerMode: 'none'
         //transitionConfig: () => fromRight(600),
