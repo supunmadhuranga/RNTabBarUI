@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
+import firebase from 'firebase';
 import {MaterialIcons, Entypo, FontAwesome5, SimpleLineIcons, Ionicons, MaterialCommunityIcons, AntDesign} from 'react-native-vector-icons';
 import Dialog, { DialogFooter, DialogButton, DialogTitle, SlideAnimation, ScaleAnimation, DialogContent } from 'react-native-popup-dialog';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -31,34 +32,54 @@ import * as ApiMethods from "../../config/Api";
 
 const gallery = [
     {
-        uri: 'https://i.picsum.photos/id/176/200/300.jpg?hmac=FVhRySTQhcAO5Xvxk6nE-bMsJSyIAW8Uw6zWgAh9hzY'
+        uri: 'https://i.picsum.photos/id/176/200/300.jpg?hmac=FVhRySTQhcAO5Xvxk6nE-bMsJSyIAW8Uw6zWgAh9hzY',
+        uid:'',
+        username:'',
     },
     {
-        uri: 'https://i.picsum.photos/id/296/200/200.jpg?hmac=y-H33xJ0Tpm9muoZO3ZMb5kXpNPG1mptQ9HBmpjCc8A'
+        uri: 'https://i.picsum.photos/id/296/200/200.jpg?hmac=y-H33xJ0Tpm9muoZO3ZMb5kXpNPG1mptQ9HBmpjCc8A',
+        uid:'',
+        username:'',
     },
     {
-        uri: 'https://homepages.cae.wisc.edu/~ece533/images/airplane.png'
+        uri: 'https://homepages.cae.wisc.edu/~ece533/images/airplane.png',
+        uid:'',
+        username:'',
     },
     {
-        uri: 'https://i.picsum.photos/id/296/200/200.jpg?hmac=y-H33xJ0Tpm9muoZO3ZMb5kXpNPG1mptQ9HBmpjCc8A'
+        uri: 'https://i.picsum.photos/id/296/200/200.jpg?hmac=y-H33xJ0Tpm9muoZO3ZMb5kXpNPG1mptQ9HBmpjCc8A',
+        uid:'',
+        username:'',
     },
     {
-        uri: 'https://i.picsum.photos/id/176/200/300.jpg?hmac=FVhRySTQhcAO5Xvxk6nE-bMsJSyIAW8Uw6zWgAh9hzY'
+        uri: 'https://i.picsum.photos/id/176/200/300.jpg?hmac=FVhRySTQhcAO5Xvxk6nE-bMsJSyIAW8Uw6zWgAh9hzY',
+        uid:'',
+        username:'',
     },
     {
-        uri: 'https://i.picsum.photos/id/296/200/200.jpg?hmac=y-H33xJ0Tpm9muoZO3ZMb5kXpNPG1mptQ9HBmpjCc8A'
+        uri: 'https://i.picsum.photos/id/296/200/200.jpg?hmac=y-H33xJ0Tpm9muoZO3ZMb5kXpNPG1mptQ9HBmpjCc8A',
+        uid:'',
+        username:'',
     },
     {
-        uri: 'https://i.picsum.photos/id/176/200/300.jpg?hmac=FVhRySTQhcAO5Xvxk6nE-bMsJSyIAW8Uw6zWgAh9hzY'
+        uri: 'https://i.picsum.photos/id/176/200/300.jpg?hmac=FVhRySTQhcAO5Xvxk6nE-bMsJSyIAW8Uw6zWgAh9hzY',
+        uid:'',
+        username:'',
     },
     {
-        uri: 'https://i.picsum.photos/id/296/200/200.jpg?hmac=y-H33xJ0Tpm9muoZO3ZMb5kXpNPG1mptQ9HBmpjCc8A'
+        uri: 'https://i.picsum.photos/id/296/200/200.jpg?hmac=y-H33xJ0Tpm9muoZO3ZMb5kXpNPG1mptQ9HBmpjCc8A',
+        uid:'',
+        username:'',
     },
     {
-        uri: 'https://homepages.cae.wisc.edu/~ece533/images/airplane.png'
+        uri: 'https://homepages.cae.wisc.edu/~ece533/images/airplane.png',
+        uid:'',
+        username:'',
     },
     {
-        uri: 'https://i.picsum.photos/id/296/200/200.jpg?hmac=y-H33xJ0Tpm9muoZO3ZMb5kXpNPG1mptQ9HBmpjCc8A'
+        uri: 'https://i.picsum.photos/id/296/200/200.jpg?hmac=y-H33xJ0Tpm9muoZO3ZMb5kXpNPG1mptQ9HBmpjCc8A',
+        uid:'',
+        username:'',
     },
 
 ];
@@ -70,11 +91,13 @@ export default class NewEventStepThree extends Component {
         const itemSize = (Sizes.wp('92%') - 80) / 4;
         this.state = {
             spinner: false,
+            uid: firebase.auth().currentUser.uid,
             eventTitle:'Enter event name',
             rbPlaceholder:'Enter event name...',
             isEnabled:false,
-            galleryData: null,
+            galleryData: [],
             itemSize,
+            peoples:[],
             totalPosts: gallery.length,
         };
     }
@@ -144,6 +167,25 @@ export default class NewEventStepThree extends Component {
         });
     }
 
+    AddNewEvent = async() => {
+        let data_obj = {
+            uid:this.state.uid,
+            name:'Test Event',
+            place:'Sydney',
+            start_date:'19/05/2020',
+            return_date:'19/05/2020',
+            start_hour:'10.00.00 AM',
+            return_hour:'10.00.00 AM',
+            min_age:'16',
+            max_age:'36',
+            people_count:'200',
+            type:'public',
+            request:'yes'
+        }
+
+        let result = await ApiMethods.AddNewData('events', data_obj);
+    }
+
     renderItem = ({ item, index }) => {
         
         return (
@@ -171,7 +213,8 @@ export default class NewEventStepThree extends Component {
     }
 
     NextStep = () => {
-        this.props.navigation.navigate("CreateEventStepThree");
+        this.AddNewEvent();
+        //this.props.navigation.navigate("CreateEventStepThree");
     }
 
     render() {
@@ -192,14 +235,29 @@ export default class NewEventStepThree extends Component {
                             </View>
                         </View>
 
-                        <View style={styles.peoplesListWrapper}>
+                        {this.state.galleryData.length > 0?
+                            <View style={styles.peoplesListWrapper}>
+                                <FlatList
+                                    data={this.state.galleryData}
+                                    numColumns={4}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    renderItem={this.renderItem}
+                                />
+                            </View>
+                        :
+                            <View style={styles.emptyItemWrapper}>
+                                <Text style={styles.emptyText}>No Images added yet</Text>
+                            </View>
+                        }
+
+                        {/* <View style={styles.peoplesListWrapper}>
                             <FlatList
                                 data={this.state.galleryData}
                                 numColumns={4}
                                 keyExtractor={(item, index) => index.toString()}
                                 renderItem={this.renderItem}
                             />
-                        </View>
+                        </View> */}
 
                         {/* next button */}
                         <View style={styles.nextButtonWrapper}>
@@ -238,7 +296,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'space-between',
-        backgroundColor:'yellow',
+        //backgroundColor:'yellow',
         borderRadius:Sizes.mainItemsRadius,
         marginBottom:Sizes.wp('2%'),
     },

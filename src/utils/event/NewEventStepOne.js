@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
-import {MaterialIcons, Entypo, FontAwesome5, SimpleLineIcons, Ionicons, MaterialCommunityIcons, AntDesign} from 'react-native-vector-icons';
+import {Feather, MaterialIcons, Entypo, FontAwesome5, SimpleLineIcons, Ionicons, MaterialCommunityIcons, AntDesign} from 'react-native-vector-icons';
 import Dialog, { DialogFooter, DialogButton, DialogTitle, SlideAnimation, ScaleAnimation, DialogContent } from 'react-native-popup-dialog';
 import Spinner from 'react-native-loading-spinner-overlay';
 
@@ -21,6 +21,7 @@ import RBSheet from "../../components/react-native-raw-bottom-sheet";
 import Ripple from '../../components/react-native-material-ripple/index';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from "moment";
+import RNPickerSelect from 'react-native-picker-select';
 
 import Sizes from '../../styles/sizes';
 import Colors from '../../styles/colors';
@@ -44,8 +45,8 @@ export default class NewEventStepOne extends Component {
             return_hour:moment(Date.now()).format('LT'),
             min_age:'',
             max_age:'',
-            prople_count:'',
-            event_type:'',
+            prople_count:0,
+            event_type:'no',
 
             rbPlaceholder:'Enter event name...',
             isEnabled:false,
@@ -224,6 +225,24 @@ export default class NewEventStepOne extends Component {
         })
     };
 
+    setNumberOfPeople = (count) => {
+        if (count != '') {
+            this._isMounted && this.setState({
+                prople_count:count,
+            })
+        } 
+    }
+
+    setEventType = (type) => {
+
+        if (type != '' || type != null) {
+            this._isMounted && this.setState({
+                event_type:type,
+            })
+        }
+            
+    }
+
     toggleSwitch = (value) => {
         this.setState({
             isEnabled: value,
@@ -342,21 +361,58 @@ export default class NewEventStepOne extends Component {
                             <View style={styles.twoItemLeftWrapper}>
                                 <Text style={styles.lablesAll}>Max people</Text>
                                 <TouchableHighlight 
-                                    onPress={() => {this.setTitle()}}
+                                    onPress={() => {this.InputNumber.open()}}
                                     underlayColor={'#e0dbdb'}
                                     style={styles.twoItemTextWrapper}
                                 >
-                                    <Text style={styles.lablesWithTextAll}>Start hour</Text>
+                                    <Text style={styles.lablesWithTextAll}>{this.state.prople_count}</Text>
                                 </TouchableHighlight>
                             </View>
                             <View style={styles.twoItemRightWrapper}>
                                 <Text style={styles.lablesAll}>Private event</Text>
                                 <TouchableHighlight 
-                                    onPress={() => {this.setTitle()}}
+                                    //onPress={() => {this.setTitle()}}
                                     underlayColor={'#e0dbdb'}
-                                    style={styles.twoItemTextWrapper}
+                                    style={[styles.twoItemTextWrapper, {paddingTop:Sizes.wp('3%'), paddingBottom:Sizes.wp('3%')}]}
                                 >
-                                    <Text style={styles.lablesWithTextAll}>Return hour</Text>
+
+                                    {/* <Text style={styles.lablesWithTextAll}>Return hour</Text> */}
+                                    <RNPickerSelect
+                                        onValueChange={(value) => this.setEventType(value)}
+                                        value={this.state.event_type}
+                                        items={[
+                                            { label: 'No', value: 'no' },
+                                            { label: 'Yes', value: 'yes' },
+                                            { label: 'Only followers', value: 'only' },
+                                        ]}
+                                        useNativeAndroidPickerStyle={false}
+                                        style={{
+                                            placeholder: {
+                                                
+                                            },
+                                            headlessAndroidContainer: {
+                                                
+                                            },
+                                            viewContainer: {
+                                                
+                                            },
+                                            inputAndroidContainer: {
+                                                
+                                            },
+                                            inputAndroid:{
+                                                fontFamily:Fonts.mainMedium,
+                                                fontSize:Sizes.wp('4%'),
+                                                paddingLeft:Sizes.wp('4%'),
+                                            },
+                                            iconContainer:{
+                                                backgroundColor:'yellow',
+                                                padding:Sizes.wp('4%'),
+                                            },
+                                            
+                                            
+                                        }}
+                                    />
+                                    
                                 </TouchableHighlight>
                             </View>
                         </View>
@@ -482,10 +538,10 @@ export default class NewEventStepOne extends Component {
                             </View>
                         </RBSheet>
 
-                        {/* Date Input bottom modal */}
+                        {/* NumberInput bottom modal */}
                         <RBSheet
                             ref={ref => {
-                                this.DatePickerOld = ref;
+                                this.InputNumber = ref;
                             }}
                             //height={60}
                             animationType="none"
@@ -508,13 +564,14 @@ export default class NewEventStepOne extends Component {
                                 <View style={styles.rbInputTextWrapper}>
                                     <TextInput 
                                         style={styles.rbInputText} 
+                                        keyboardType="number-pad"
                                         autoFocus 
-                                        placeholder={this.state.rbPlaceholder}
+                                        placeholder="Enter number of people"
                                         underlineColorAndroid='transparent'
-                                        onChangeText={(write) => this.setWriteData(write)} 
+                                        onChangeText={(count) => this.setNumberOfPeople(count)} 
 
                                     />
-                                    <TouchableOpacity onPress={ ()=>{this.closeInput()} }>
+                                    <TouchableOpacity onPress={ ()=>{this.InputNumber.close()} }>
                                         <Text style={styles.rbDoneText}>Done</Text>
                                     </TouchableOpacity>
                                     {/* <MaterialIcons name="tag-faces" /> */}
@@ -525,55 +582,6 @@ export default class NewEventStepOne extends Component {
                                     onPress={() => this.Input.close()}
                                 /> */}
                             </View>
-                        </RBSheet>
-
-                        <RBSheet
-                            ref={ref => {
-                                this.DatePicker = ref;
-                            }}
-                            animationType="none"
-                            openDuration={200}
-                            customStyles={{
-                                wrapper: { backgroundColor: "transparent" },
-                                container: {
-                                    //justifyContent: "center",
-                                    //alignItems: "center",
-                                    height: 'auto', 
-                                    maxHeight: 500,
-                                    //borderTopLeftRadius:15,
-                                    //borderTopRightRadius:15,
-                                }
-                            }}
-                        >
-                            <View style={styles.dateHeaderContainer}>
-                                <TouchableOpacity
-                                    onPress={() => this.DatePicker.close()}
-                                    style={styles.dateHeaderButton}
-                                >
-                                    <Text style={styles.dateHeaderButtonCancel}>Cancel</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    onPress={() => this.DatePicker.close()}
-                                    style={[styles.dateHeaderButton]}
-                                >
-                                    <Text style={styles.dateHeaderButtonDone}>Done</Text>
-                                </TouchableOpacity>
-                            </View>
-                            <DateTimePicker 
-                                //showIcon={false}
-                                display="spinner"
-                                value={Date.now()}
-                                mode="date"
-                                placeholder="select date"
-                                format="DD-MM-YYYY"
-                                //minDate="2016-05-01"
-                                //maxDate={moment().format('DD-MM-YYYY')}
-                                //maxDate="2050-05-01"
-                                //date={new Date()} 
-                                onChange={(date) => {
-                                    this.setState({ start_date: date });
-                                }}    
-                            />
                         </RBSheet>
 
                     </View>
@@ -607,7 +615,7 @@ const styles = StyleSheet.create({
         fontFamily:Fonts.mainMedium,
         fontSize:Sizes.wp('5%'),
         padding:Sizes.wp('4%'),
-        paddingLeft:0,
+        paddingLeft:Sizes.wp('2%'),
     },
     placeWrapper: {
         marginBottom:Sizes.wp('2%'),
@@ -743,7 +751,7 @@ const styles = StyleSheet.create({
         borderRadius:Sizes.mainItemsRadius,
     },
     switchWrapper: {
-
+        paddingLeft:Sizes.wp('4%'),
     },
     nextButtonWrapper: {
         width: '100%',
@@ -864,3 +872,26 @@ const styles = StyleSheet.create({
         textAlignVertical: 'bottom',
     },
 });
+
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+      fontSize: 16,
+      paddingVertical: 12,
+      paddingHorizontal: 10,
+      borderWidth: 1,
+      borderColor: 'gray',
+      borderRadius: 4,
+      color: 'black',
+      paddingRight: 30, // to ensure the text is never behind the icon
+    },
+    inputAndroid: {
+      fontSize: 16,
+      paddingHorizontal: 10,
+      paddingVertical: 8,
+      borderWidth: 0.5,
+      borderColor: 'purple',
+      borderRadius: 8,
+      color: 'green',
+      paddingRight: 30, // to ensure the text is never behind the icon
+    },
+  });

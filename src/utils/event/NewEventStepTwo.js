@@ -58,8 +58,9 @@ export default class NewEventStepTwo extends Component {
             eventTitle:'Enter event name',
             rbPlaceholder:'Enter event name...',
             isEnabled:false,
-            galleryData: null,
+            galleryData: [],
             itemSize,
+            photos:[],
             totalPosts: gallery.length,
         };
     }
@@ -124,9 +125,9 @@ export default class NewEventStepTwo extends Component {
         //     console.log("fetch results error");
         // } 
 
-        this._isMounted && this.setState({
-            galleryData: gallery,
-        });
+        // this._isMounted && this.setState({
+        //     galleryData: gallery,
+        // });
     }
 
     renderItem = ({ item, index }) => {
@@ -153,11 +154,84 @@ export default class NewEventStepTwo extends Component {
         );
     }
 
+    openPhotosMenu = () => {
+        this.RBSheetTakePhotos.open();
+    }
+
+    /* Take phots menu */
+    TakePhotosMenu = () => {
+        return (
+            <>
+                <View style={{}}>
+                    <Text style={styles.popupTextTitle}>Choose Option</Text>
+                </View>
+
+                <View
+                    style={{
+                        height: 1,
+                        width: "100%",
+                        backgroundColor: "#EAEDED",
+                    }}
+                />
+
+                <TouchableOpacity onPress={() => {this.selectOption(0)}} underlayColor={'#e0dbdb'} style={{}}>
+                    <Text style={styles.popupText}>Select Photo</Text>
+                </TouchableOpacity>
+
+                <View
+                    style={{
+                        height: 1,
+                        width: "100%",
+                        backgroundColor: "#EAEDED",
+                    }}
+                />
+
+                <TouchableOpacity onPress={() => {this.selectOption(1)}} underlayColor={'#e0dbdb'} style={{}}>
+                    <Text style={styles.popupText}>Take Photo</Text>
+                </TouchableOpacity>
+
+                <View
+                    style={{
+                        height: 1,
+                        width: "100%",
+                        backgroundColor: "#EAEDED",
+                    }}
+                />
+                <View style={{}}>
+                    <Text style={styles.popupText}></Text>
+                </View>
+            </>
+        );
+        
+    }
+
+    selectOption = async(option) => {
+        this.RBSheetTakePhotos.close();
+
+        let uri = null;
+        if (option === 0) {
+            uri = await PermissionsApi._selectPhoto();
+        } else {
+            uri = await PermissionsApi._takePhoto();
+        }
+        
+        if (uri) {
+            console.log(uri);
+            let obj = {uri:uri};
+            const newArray = this.state.photos.slice(); // Create a copy
+            newArray.push(obj); // Push the object
+            this._isMounted && this.setState({
+                photos:newArray,
+            });
+        }
+    }
+
     NextStep = () => {
         this.props.navigation.navigate("CreateEventStepThree");
     }
 
     render() {
+        console.log(this.state.photos);
         return (
             <View style={styles.container}>
                 <ScrollView scrollEnabled={true} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'handled'} contentContainerStyle={{ flexGrow: 1}} >
@@ -169,20 +243,29 @@ export default class NewEventStepTwo extends Component {
                                 <Text style={styles.PageTitle}>Add photos</Text>
                             </View>
                             <View>
-                                <TouchableOpacity style={styles.addIcon}>
+                                <TouchableOpacity
+                                    onPress={()=> this.openPhotosMenu()} 
+                                    style={styles.addIcon}
+                                >
                                     <AntDesign name='pluscircle' size={Sizes.wp('10%')} color='#000' />
                                 </TouchableOpacity>
                             </View>
                         </View>
 
-                        <View style={styles.photoListWrapper}>
-                            <FlatList
-                                data={this.state.galleryData}
-                                numColumns={3}
-                                keyExtractor={(item, index) => index.toString()}
-                                renderItem={this.renderItem}
-                            />
-                        </View>
+                        {this.state.photos.length > 0?
+                            <View style={styles.photoListWrapper}>
+                                <FlatList
+                                    data={this.state.photos}
+                                    numColumns={3}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    renderItem={this.renderItem}
+                                />
+                            </View>
+                        :
+                            <View style={styles.emptyItemWrapper}>
+                                <Text style={styles.emptyText}>No Images added yet</Text>
+                            </View>
+                        }
 
                         {/* next button */}
                         <View style={styles.nextButtonWrapper}>
@@ -197,6 +280,35 @@ export default class NewEventStepTwo extends Component {
                             </Ripple>
                            
                         </View>
+
+                        {/* bottom menu start */}
+                        <RBSheet
+                            ref={ref => {
+                                this.RBSheetTakePhotos = ref;
+                            }}
+                            //height={Sizes.wp('50%')}
+                            //minClosingHeight={}
+                            openDuration={700}
+                            closeOnDragDown={true}
+                            dragFromTopOnly={true}
+                            openDuration={250}
+                            customStyles={{
+                                container: {
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    height: 'auto', 
+                                    maxHeight: 300,
+                                    borderTopLeftRadius:15,
+                                    borderTopRightRadius:15,
+                                }
+                            }}
+                        >
+                            
+
+                            <this.TakePhotosMenu />
+                            {/* <YourOwnComponent /> */}
+                        </RBSheet>
+                        {/* bottom menu ends */}
 
                     </View>
                 </ScrollView>
@@ -221,7 +333,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'space-between',
-        backgroundColor:'yellow',
+        //backgroundColor:'yellow',
         borderRadius:Sizes.mainItemsRadius,
         marginBottom:Sizes.wp('2%'),
     },
@@ -236,6 +348,15 @@ const styles = StyleSheet.create({
         height:Sizes.wp('5%'), 
         width:Sizes.wp('10%'), 
         marginRight:Sizes.wp('0%')
+    },
+    emptyItemWrapper: {
+        justifyContent:'center'
+    },
+    emptyText: {
+        alignSelf:'center',
+        fontFamily:Fonts.main,
+        fontSize:Sizes.wp('5%'),
+        color:Colors.sideBarIcon,
     },
     photoListWrapper: {
         flex:1,
@@ -265,4 +386,20 @@ const styles = StyleSheet.create({
         paddingLeft:0,
         color:Colors.white,
     },
+    popupText: {
+        fontFamily:Fonts.main,
+        fontSize:Sizes.wp('5%'),
+        textAlign: "center",
+        color:"#575757",
+        marginTop:Sizes.wp('4%'),
+        marginBottom:Sizes.wp('4%'),
+    },
+    popupTextTitle: {
+        fontFamily:Fonts.mainMedium,
+        fontSize:Sizes.wp('5%'),
+        textAlign: "center",
+        color:"#575757",
+        marginTop:Sizes.wp('4%'),
+        marginBottom:Sizes.wp('4%'),
+    }
 });

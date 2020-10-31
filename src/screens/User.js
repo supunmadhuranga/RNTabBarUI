@@ -49,105 +49,103 @@ import * as PermissionsApi from "../utils/Permissions";
 import { TouchableHighlight } from 'react-native-gesture-handler';
 
 export default class User extends Component {
-        constructor(props) {
-            super(props);
-            this._isMounted = false;
-            this.state = {
-                isConnected: true,
-                isLoading: true,
-                name:'',
-                userImage: null,
-                uid: firebase.auth().currentUser.uid,
-                index : 0,
-                following: 0,
-                followers: 0,
-                postCount: 0,
-                guestId: null,
-                photoSelectMenu: false,
-                
-                routes: [
-                    { key: 'first', title: 'Photos' },
-                    { key: 'second', title: 'Events' },
-                    { key: 'third', title: 'Info' },
-                ],
-                
-            };
-            YellowBox.ignoreWarnings(['Setting a timer']);
-
+    constructor(props) {
+        super(props);
+        this._isMounted = false;
+        this.state = {
+            isConnected: true,
+            isLoading: true,
+            name:'',
+            userImage: null,
+            uid: firebase.auth().currentUser.uid,
+            index : 0,
+            following: 0,
+            followers: 0,
+            postCount: 0,
+            guestId: null,
+            photoSelectMenu: false,
             
-        }
-
-        /* navigation header */
-        static navigationOptions = ({ navigation }) => {
-            return {
-                headerTitle: '',
-                headerRight: () => ( 
-                    // <View style={{flex:1, justifyContent:'center', height:Sizes.wp('5%'), width:Sizes.wp('10%'), marginRight:Sizes.wp('0%')}}>
-                    //     <TouchableOpacity 
-                    //         onPress={navigation.getParam('_userLogOut')}
-                    //         style={{height:Sizes.wp('10%'), width:Sizes.wp('10%'), justifyContent: 'center', alignItems:'center', borderRadius:Sizes.wp('10%')/2 }}>
-                    //         <Entypo name='dots-three-vertical' size={Sizes.wp('5%')} color={Colors.black} />
-                    //     </TouchableOpacity>
-                    // </View>
-                    <View style={{flexDirection:'row'}}>
-                        <TouchableOpacity onPress={navigation.getParam('_openCreatePostMenu')} style={{flex:1, justifyContent:'center', height:Sizes.wp('5%'), width:Sizes.wp('10%'), marginRight:Sizes.wp('0%')}}>
-                            <AntDesign name='plus' size={Sizes.wp('7%')} color='#000' />
-                        </TouchableOpacity>
-                        <View style={{flex:1, justifyContent:'center', height:Sizes.wp('5%'), width:Sizes.wp('10%'), marginRight:Sizes.wp('0%')}}>
-                            <CustomMenu
-                                //Menu Text
-                                menutext="Menu"
-                                //Menu View Style
-                                menustyle={{
-                                    marginRight: 16,
-                                    flexDirection: 'row',
-                                    justifyContent: 'flex-end',
-                                }}
-                                //Menu Text Style
-                                textStyle={{
-                                    color: '#000',
-                                }}
-                                //Click functions for the menu items
-                                //option1Click={() => this.userLogOut()}
-                                
-                                option1Click={navigation.getParam('_userLogOut')}
-                            />
-                        </View>
-                    </View>
-                ),
-                
-                headerStyle: {
-                    backgroundColor:Colors.white,
-                    elevation: 0,
-                    shadowOpacity: 0,
-                },
-                //headerTintColor: "#fff",
-            };
+            routes: [
+                { key: 'first', title: 'Photos' },
+                { key: 'second', title: 'Events' },
+                { key: 'third', title: 'Info' },
+            ],
             
         };
+        YellowBox.ignoreWarnings(['Setting a timer']);
+    }
 
-        async componentDidMount() {
-            this._isMounted = true;
+    /* navigation header */
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerTitle: '',
+            headerRight: () => ( 
+                // <View style={{flex:1, justifyContent:'center', height:Sizes.wp('5%'), width:Sizes.wp('10%'), marginRight:Sizes.wp('0%')}}>
+                //     <TouchableOpacity 
+                //         onPress={navigation.getParam('_userLogOut')}
+                //         style={{height:Sizes.wp('10%'), width:Sizes.wp('10%'), justifyContent: 'center', alignItems:'center', borderRadius:Sizes.wp('10%')/2 }}>
+                //         <Entypo name='dots-three-vertical' size={Sizes.wp('5%')} color={Colors.black} />
+                //     </TouchableOpacity>
+                // </View>
+                <View style={{flexDirection:'row'}}>
+                    <TouchableOpacity onPress={navigation.getParam('_openCreatePostMenu')} style={{flex:1, justifyContent:'center', height:Sizes.wp('5%'), width:Sizes.wp('10%'), marginRight:Sizes.wp('0%')}}>
+                        <AntDesign name='plus' size={Sizes.wp('7%')} color='#000' />
+                    </TouchableOpacity>
+                    <View style={{flex:1, justifyContent:'center', height:Sizes.wp('5%'), width:Sizes.wp('10%'), marginRight:Sizes.wp('0%')}}>
+                        <CustomMenu
+                            //Menu Text
+                            menutext="Menu"
+                            //Menu View Style
+                            menustyle={{
+                                marginRight: 16,
+                                flexDirection: 'row',
+                                justifyContent: 'flex-end',
+                            }}
+                            //Menu Text Style
+                            textStyle={{
+                                color: '#000',
+                            }}
+                            //Click functions for the menu items
+                            //option1Click={() => this.userLogOut()}
+                            
+                            option1Click={navigation.getParam('_userLogOut')}
+                        />
+                    </View>
+                </View>
+            ),
+            
+            headerStyle: {
+                backgroundColor:Colors.white,
+                elevation: 0,
+                shadowOpacity: 0,
+            },
+            //headerTintColor: "#fff",
+        };
+        
+    };
 
-            /*set navigation header function*/
-            this.props.navigation.setParams({
-                _userLogOut: this.userLogOut
-            });
+    async componentDidMount() {
+        this._isMounted = true;
 
-            /* set RBsheet header function */
-            this.props.navigation.setParams({
-                _openCreatePostMenu: this.openCreatePostMenu
-            });
+        /*set navigation header function*/
+        this.props.navigation.setParams({
+            _userLogOut: this.userLogOut
+        });
 
-            this._isMounted && this.getUserData();
-            /* Retrive data from firestore */
-            //this.unsubscribe = this.firestoreRef.onSnapshot(this.getCollection);
-        }
+        /* set RBsheet header function */
+        this.props.navigation.setParams({
+            _openCreatePostMenu: this.openCreatePostMenu
+        });
 
-        componentWillUnmount(){
-            this._isMounted = false;
-            //this.unsubscribe();
-        }
+        this._isMounted && this.getUserData();
+
+    }
+
+    componentWillUnmount(){
+        this._isMounted = false;
+        this.focusListener.remove();
+        //this.unsubscribe();
+    }
 
         
 
@@ -418,6 +416,7 @@ export default class User extends Component {
 
         createEvent = () => {
             this.RBSheet.close();
+            this.props.navigation.navigate("NewEventScreen");
 
         }
 

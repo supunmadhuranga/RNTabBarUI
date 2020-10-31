@@ -144,6 +144,7 @@ export const fetchUserPosts = async() => {
       })
 }
 
+/* any local image upload to firebase storage and get remote url */
 const uploadPhotoAsync = async(local_uri, filename) => {
 
     return new Promise(async (res, rej) => {
@@ -254,3 +255,54 @@ export const createPost = async(id, postData) => {
         })
 }
 
+export const AddNewData = async(collection_name, data_obj) => {
+    
+    var collectionRef =  firebase.firestore().collection(collection_name).doc();
+
+    data_obj['id'] =  collectionRef.id;
+
+    return collectionRef.set(data_obj)
+        .then(
+            (docRef) => {
+                console.log(docRef);
+                //console.log("Document written with ID: ", docRef.id);
+                return true;
+            }
+        )
+        .catch(function(error) {
+            console.error("Error adding document: ", error);
+            return false;
+        });
+    // collectionRef.add({
+    //     id
+    //     uid
+    //     name
+    //     place
+    //     start_date
+    //     return_date
+    //     start_hour
+    //     return_hour
+    //     min_age
+    //     max_age
+    //     people_count
+    //     type
+    //     request
+    // })
+}
+
+export const fetchData = async(collection_name) => {
+    let user = firebase.auth().currentUser;
+    return firebase
+      .firestore()
+      .collection(collection_name)
+      .where('uid', '==', user.uid)
+      .get()
+      .then(function(querySnapshot) {
+        let posts = querySnapshot.docs.map(doc => doc.data())
+        return posts;
+      })
+      .catch(function(error) {
+        console.log('Error getting documents: ', error)
+        return error;
+      })
+}

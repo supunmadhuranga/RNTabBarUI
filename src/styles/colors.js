@@ -5,8 +5,9 @@ export default {
     white:'#ffffff',
     
     main:'#2196f3',
-
+    primary:'#1565c0',
     mainBackground: '#fffcf5',
+    mainFieldColor: '#f5f5f5',
 
     underlay:'#e0dbdb',
 
