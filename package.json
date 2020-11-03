@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "10.0.0",
+    "@react-native-community/datetimepicker": "^3.0.4",
     "@react-native-community/masked-view": "0.1.10",
     "expo": "38.0.2",
     "expo-font": "8.2.1",
@@ -19,6 +20,7 @@
     "expo-random": "^9.0.0",
     "expo-status-bar": "1.0.2",
     "firebase": "7.9.0",
+    "moment": "^2.29.1",
     "react": "16.11.0",
     "react-addons-shallow-compare": "15.6.2",
     "react-dom": "16.11.0",
@@ -29,6 +31,7 @@
     "react-native-loading-spinner-overlay": "^2.0.0",
     "react-native-maps": "0.27.1",
     "react-native-paper": "4.0.1",
+    "react-native-picker-select": "^8.0.2",
     "react-native-popup-dialog": "^0.18.3",
     "react-native-reanimated": "1.9.0",
     "react-native-responsive-screen": "1.4.1",

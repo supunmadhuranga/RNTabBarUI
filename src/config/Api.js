@@ -45,6 +45,7 @@ export const userSignIn = async(email, password) => {
             });
 }
 
+/* get user details by logged user id */
 export const fetchUserDetails = async() => {
     let user = firebase.auth().currentUser;
     return firebase
@@ -53,14 +54,27 @@ export const fetchUserDetails = async() => {
         .doc(user.uid)
         .get()
         .then(function(doc) {
-        let userDetails = doc.data()
-        return userDetails
+            let userDetails = doc.data()
+            return userDetails;
         })
         .catch(function(error) {
             console.log('Error getting documents: ', error);
+            return false;
         })
 }
 
+/* user logout */
+export const UserSignOut = async() => {
+    return firebase.auth().signOut().then((res) => {
+        return true;
+    })
+    .catch(error => {
+        console.log('Error getting documents: ', error);
+        return false;
+    });
+}
+
+/* upload profile image */
 export const uploadAvatar = async(localUri) => {
     let user = firebase.auth().currentUser;
 

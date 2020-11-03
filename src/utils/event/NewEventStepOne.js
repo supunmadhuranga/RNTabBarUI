@@ -17,6 +17,7 @@ import {Feather, MaterialIcons, Entypo, FontAwesome5, SimpleLineIcons, Ionicons,
 import Dialog, { DialogFooter, DialogButton, DialogTitle, SlideAnimation, ScaleAnimation, DialogContent } from 'react-native-popup-dialog';
 import Spinner from 'react-native-loading-spinner-overlay';
 
+import SnackBar from '../../components/rn-snackbar-component/index';
 import RBSheet from "../../components/react-native-raw-bottom-sheet";
 import Ripple from '../../components/react-native-material-ripple/index';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -38,7 +39,8 @@ export default class NewEventStepOne extends Component {
         this.state = {
             spinner: false,
             event_title:'Enter event name',
-            event_place:'Enter event Place',
+            event_desc:'Enter event description',
+            event_place:'Enter event place',
             start_date:moment(Date.now()).format('DD/MM/YYYY'),
             return_date:moment(Date.now()).format('DD/MM/YYYY'),
             start_hour:moment(Date.now()).format('LT'),
@@ -56,6 +58,9 @@ export default class NewEventStepOne extends Component {
             textFiledType:'title',
             dateType:'startdate',
             timeType:'starthour',
+            validate:false,
+            snackbarVisible:false,
+            snackbarMessage:'',
             
         };
     }
@@ -113,36 +118,48 @@ export default class NewEventStepOne extends Component {
         this._isMounted = false;
         //this.unsubscribe();
     }
-    
-    setTitle = () => {
-        this.Input.open();
+
+    showSnackbar = (message) => {
+        if (!this.state.snackbarVisible) {
+            this._isMounted && this.setState({
+                snackbarVisible:true,
+                //snackbarVisibleType:type,
+                snackbarMessage:message,
+            })
+            setTimeout(() => {
+                this.hideSnackbar()
+            },  3000)
+        }
     }
 
-    setDate = () => {
-        this.DateRBSheet.open();
+    hideSnackbar = () => {
+        this._isMounted && this.setState({
+            snackbarVisible:false,
+            //snackbarVisibleType:type,
+            snackbarMessage:'',
+        })
+    }
+
+    setTitle = (value) => {
+        this._isMounted && this.setState({
+            event_title:value,
+        })
+    }
+
+    setDescription = (value) => {
+        this._isMounted && this.setState({
+            event_desc:value,
+        })
+    }
+    
+    setPlace = (value) => {
+        this._isMounted && this.setState({
+            event_place:value,
+        })
     }
 
     closeInput = () => {
         this.Input.close();
-    }
-
-    onPressInput = (field) => {
-
-        if (field == 'title') {
-            this._isMounted && this.setState({
-                textFiledType:'title',
-                rbPlaceholder:'Enter even name...'
-            }) 
-            this.Input.open();
-        }
-
-        if (field == 'place') {
-            this._isMounted && this.setState({
-                textFiledType:'place',
-                rbPlaceholder:'Enter even place...'
-            }) 
-            this.Input.open();
-        }
     }
 
     setWriteData = (write) => {
@@ -252,8 +269,36 @@ export default class NewEventStepOne extends Component {
         }
     }
 
+    validateData = () => {
+
+        let value = true;
+
+        if (this.state.event_title == 'Enter event name' || this.state.event_title == '') {
+            value = false;
+            //return;
+        }
+
+        if (this.state.event_place == 'Enter event place' || this.state.event_place == '') {
+            value = false;
+            //return;
+        }
+
+        this.setState({
+            validate: value,
+        },
+        () => {
+            this.NextStep();
+        });
+
+    }
+
     NextStep = () => {
-        this.props.navigation.navigate("CreateEventStepTwo");
+
+        if (this.state.validate){
+            this.props.navigation.navigate("CreateEventStepTwo");
+        } else {
+            this.showSnackbar('Please fill all fields');
+        }
     }
 
     render() {
@@ -263,24 +308,50 @@ export default class NewEventStepOne extends Component {
                     <View style={styles.mainWrapper}>
                         
                         {/* event title */}
-                        <TouchableHighlight 
-                            onPress={() => {this.onPressInput('title')}}
-                            underlayColor={'#e0dbdb'}
-                            style={styles.EventTitleWrapper}
-                        >
-                            <Text style={styles.EventTitle}>{this.state.event_title}</Text>
-                        </TouchableHighlight>
+                        <View style={styles.EventTitleWrapper}>
+                            <TextInput
+                                style={[styles.EventTitle]}
+                                autoCapitalize = 'none'
+                                placeholder={'Title'}
+                                //keyboardType="email-address"
+                                placeholderTextColor='#CCC5B9'
+                                underlineColorAndroid='transparent'
+                                onChangeText={(des) => this.setTitle(des)}
+                                onFocus={this.onFocusChange}
+                                onBlur={this.onBlurChange}
+                            />
+                        </View>
+
+                        {/* event description */}
+                        <View style={styles.desWrapper}>
+                            <Text style={styles.lablesAll}>Description</Text>
+                            <TextInput
+                                style={[styles.desTextInputWrapper, styles.lablesWithTextAll]}
+                                autoCapitalize = 'none'
+                                placeholder={'Description'}
+                                //keyboardType="email-address"
+                                placeholderTextColor='#CCC5B9'
+                                underlineColorAndroid='transparent'
+                                onChangeText={(des) => this.setDescription(des)}
+                                onFocus={this.onFocusChange}
+                                onBlur={this.onBlurChange}
+                            />
+                        </View>
 
                         {/* event place */}
                         <View style={styles.placeWrapper}>
                             <Text style={styles.lablesAll}>Where</Text>
-                            <TouchableHighlight 
-                                onPress={() => {this.onPressInput('place')}}
-                                underlayColor={'#e0dbdb'}
-                                style={styles.placeTextWrapper}
-                            >
-                                <Text style={styles.lablesWithTextAll}>{this.state.event_place}</Text>
-                            </TouchableHighlight>
+                            <TextInput
+                                style={[styles.placeTextInputWrapper, styles.lablesWithTextAll]}
+                                autoCapitalize = 'none'
+                                placeholder={'Place'}
+                                //keyboardType="email-address"
+                                placeholderTextColor='#CCC5B9'
+                                underlineColorAndroid='transparent'
+                                onChangeText={(place) => this.setPlace(place)}
+                                onFocus={this.onFocusChange}
+                                onBlur={this.onBlurChange}
+                            />
                         </View>
                         
                         {/* event dates */}
@@ -446,7 +517,7 @@ export default class NewEventStepOne extends Component {
                                 style={styles.btnNext}
                                 rippleContainerBorderRadius={Sizes.mainItemsRadius}
                                 rippleDuration={600}
-                                onPress={() => this.NextStep()}
+                                onPress={() => this.validateData()}
                             >
                                 <Text style={styles.nextBtnText} >Continue</Text>
                             </Ripple>
@@ -586,7 +657,16 @@ export default class NewEventStepOne extends Component {
 
                     </View>
 
-                    
+                    <SnackBar
+                        visible={this.state.snackbarVisible}
+                        message={this.state.snackbarMessage}
+                        actionHandler={() => {
+                            console.log("snackbar button clicked!")
+                        }}
+                        action=""
+                        messageStyle={styles.snackbarMessage}
+                        //autoHidingTime={300}
+                    />
 
                 </ScrollView>
             </View>
@@ -615,7 +695,14 @@ const styles = StyleSheet.create({
         fontFamily:Fonts.mainMedium,
         fontSize:Sizes.wp('5%'),
         padding:Sizes.wp('4%'),
-        paddingLeft:Sizes.wp('2%'),
+        //paddingLeft:Sizes.wp('2%'),
+    },
+    desWrapper: {
+        marginBottom:Sizes.wp('2%'),
+    },
+    desTextInputWrapper: {
+        backgroundColor:Colors.mainFieldColor,
+        borderRadius:Sizes.mainItemsRadius,
     },
     placeWrapper: {
         marginBottom:Sizes.wp('2%'),
@@ -625,7 +712,7 @@ const styles = StyleSheet.create({
         fontSize:Sizes.wp('3.5%'),
         color:'#CCD1D1',
     },
-    placeTextWrapper: {
+    placeTextInputWrapper: {
         backgroundColor:Colors.mainFieldColor,
         borderRadius:Sizes.mainItemsRadius,
     },
@@ -819,23 +906,31 @@ const styles = StyleSheet.create({
         borderColor: "#ccc",
         flexDirection: "row",
         justifyContent: "space-between"
-      },
-      dateHeaderButton: {
+    },
+    dateHeaderButton: {
         height: "100%",
         paddingHorizontal: 20,
         alignItems: "center",
         justifyContent: "center"
-      },
-      dateHeaderButtonCancel: {
+    },
+    dateHeaderButtonCancel: {
         fontSize: 18,
         color: "#666",
         fontWeight: "400"
-      },
-      dateHeaderButtonDone: {
+    },
+    dateHeaderButtonDone: {
         fontSize: 18,
         color: "#006BFF",
         fontWeight: "500"
-      },
+    },
+    snackbarMessage:{
+        fontFamily:Fonts.main, 
+        fontSize:Sizes.wp('3.75%'), 
+        color:Colors.white,
+        paddingBottom:Sizes.wp('6%'),
+        paddingTop:Sizes.wp('6%'),
+        
+    },
     
 
     text: {
