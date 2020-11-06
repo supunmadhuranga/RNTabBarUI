@@ -27,9 +27,12 @@ import Ripple from '../../components/react-native-material-ripple/index';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createStackNavigator, TransitionPresets, HeaderBackButton } from 'react-navigation-stack';
 
+import * as ApiMethods from "../../config/Api";
+
 export default class Signup extends Component {
     constructor(props) {
         super(props);
+        this._isMounted = false;
         this.state = {
             isConnected: true,
             isLoading: true,
@@ -76,25 +79,21 @@ export default class Signup extends Component {
     });
 
     componentDidMount() {
+        this._isMounted = true;
         //this.checkSession();
-        this.setState({ 
+        this._isMounted && this.setState({ 
             isLoading: false,
         });
     }
 
-    // checkSession = async() => {
-    //     firebase.auth().onAuthStateChanged(user => {
-    //         if (user) {
-    //             this.props.navigation.navigate('App');
-    //         } else {
-    //             this.props.navigation.navigate('Auth');
-    //         }
-    //     });
-    // };
+    componentWillUnmount(){
+        this._isMounted = false;
+        //this.unsubscribe();
+    }
 
     showNotification = (type, message) => {
         if (!this.state.showBottomNotification) {
-            this.setState({
+            this._isMounted && this.setState({
                 showBottomNotification:true,
                 bottomNotificationType:type,
                 bottomNotificationMessage:message,
@@ -106,7 +105,7 @@ export default class Signup extends Component {
     }
 
     hideNotification = () => {
-        this.setState({
+        this._isMounted && this.setState({
             showBottomNotification:false,
             bottomNotificationType:'',
             bottomNotificationMessage:'',
@@ -115,12 +114,12 @@ export default class Signup extends Component {
 
     showPassword = () => {
         if (this.state.press == false) {
-            this.setState({
+            this._isMounted && this.setState({
                 hidePass: false,
                 press: true,
             })
         } else {
-            this.setState({
+            this._isMounted && this.setState({
                 hidePass: true,
                 press: false,
             })
@@ -133,12 +132,12 @@ export default class Signup extends Component {
 
             const alph=/^[a-zA-Z ]{2,30}$/;
             if (alph.test(input) && input.length > 0) {
-                this.setState({
+                this._isMounted && this.setState({
                     nameValidate: true,
                     name: input,
                 })
             } else {
-                this.setState({
+                this._isMounted && this.setState({
                     nameValidate: false,
                 })
             }
@@ -149,12 +148,12 @@ export default class Signup extends Component {
 
             const alph=/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             if (alph.test(input) && input.length > 0) {
-                this.setState({
+                this._isMounted && this.setState({
                     emailValidate: true,
                     email: input,
                 })
             } else {
-                this.setState({
+                this._isMounted && this.setState({
                     emailValidate: false,
                 })
             }
@@ -165,12 +164,12 @@ export default class Signup extends Component {
 
             const alph=/^[a-zA-Z ]{2,30}$/;
             if (alph.test(input) && input.length > 0) {
-                this.setState({
+                this._isMounted && this.setState({
                     usernameValidate: true,
                     username: input,
                 })
             } else {
-                this.setState({
+                this._isMounted && this.setState({
                     usernameValidate: false,
                 })
             }
@@ -179,12 +178,12 @@ export default class Signup extends Component {
         
         if (type == 'password') {
             if (input.length > 0) {
-                this.setState({
+                this._isMounted && this.setState({
                     passwordValidate: true,
                     password: input,
                 })
             } else {
-                this.setState({
+                this._isMounted && this.setState({
                     passwordValidate: false,
                 })
             }
@@ -193,101 +192,122 @@ export default class Signup extends Component {
 
     }
 
-    userSignup = async() => {
+    pressSignupBtn = async() => {
 
         if (this.state.isConnected) {
 
             /* check input fields */
             if (this.state.name == null) {
-                this.setState({
+                this._isMounted && this.setState({
                     nameValidate: false,
                     error: true,
                     errorMsg: 'Invalid name',
                     loadSignup: false,
                 });
-                this.showNotification('Error', 'Invalid name');
+                this._isMounted && this.showNotification('Error', 'Invalid name');
                 console.log('Error', 'Invalid name');
                 return;
             }
 
             if (this.state.email == null) {
-                this.setState({
+                this._isMounted && this.setState({
                     emailValidate: false,
                     error: true,
                     errorMsg: 'Invalid email',
                     loadSignup: false,
                 });
-                this.showNotification('Error', 'Invalid email');
+                this._isMounted && this.showNotification('Error', 'Invalid email');
                 console.log('Error', 'Invalid email');
                 return;
             }
 
             if (this.state.username == null) {
-                this.setState({
+                this._isMounted && this.setState({
                     usernameValidate: false,
                     error: true,
                     errorMsg: 'Invalid username',
                     loadSignup: false,
                 });
-                this.showNotification('Error', 'Invalid username');
+                this._isMounted && this.showNotification('Error', 'Invalid username');
                 console.log('Error', 'Invalid username');
                 return;
             }
 
             if (this.state.password == null) {
-                this.setState({
+                this._isMounted && this.setState({
                     passwordValidate: false,
                     error: true,
                     errorMsg: 'Invalid password',
                     loadSignup: false,
                     
                 });
-                this.showNotification('Error', 'Invalid password');
+                this._isMounted && this.showNotification('Error', 'Invalid password');
                 console.log('Error', 'Invalid password');
                 return;
             }
 
             //load activity indicator
-            this.setState({
+            this._isMounted && this.setState({
                 loadSignup: true,
             })
 
-            firebase
-                .auth()
-                .createUserWithEmailAndPassword(this.state.email, this.state.password)
-                .then((response) => {
-                    const data = {
-                        id: response.user.uid,
-                        name: this.state.name,
-                        email: this.state.email,
-                        username: this.state.username,
-                        image: '',
-                    };
-                    const usersRef = firebase.firestore().collection('users')
-                    usersRef
-                    .doc(response.user.uid)
-                    .set(data)
-                    .then(() => {
-                        this.setState({
-                            loadSignup: false,
-                        });
-                        this.showNotification('Done', 'Signup successfully');
-                    })
-                    .catch((error) => {
-                        this.setState({
-                            loadSignup: false,
-                        });
-                        this.showNotification('Error', error.message);
-                        console.log(error);
+            ApiMethods.userSignUp(this.state.name, this.state.email, this.state.username, this.state.password).then( async(response) => {
+                if (response == true) {
+                    this._isMounted && this.setState({
+                        loadSignup: false,
                     });
-                })
-                .catch((error) => {
-                    this.setState({
-                        loadSignup: false,            
+                    this.showNotification('Done', 'Signup successfully');
+                } else {
+                    this._isMounted && this.setState({
+                        loadSignup: false,
                     });
-                    this.showNotification('Error', error.message);
-                    console.log(error);
+                    this.showNotification('Error', response.message);
+                }
             });
+
+            // firebase
+            //     .auth()
+            //     .createUserWithEmailAndPassword(this.state.email, this.state.password)
+            //     .then((response) => {
+            //         const data = {
+            //             id: response.user.uid,
+            //             name: this.state.name,
+            //             email: this.state.email,
+            //             username: this.state.username,
+            //             age: '',
+            //             sex: '',
+            //             image: '',
+            //             bio: '',
+            //             followed_count: 0,
+            //             follower_count: 0,
+            //             post_count: 0,
+            //             active: 1,
+            //         };
+            //         const usersRef = firebase.firestore().collection('users');
+            //         usersRef
+            //         .doc(response.user.uid)
+            //         .set(data)
+            //         .then(() => {
+            //             this.setState({
+            //                 loadSignup: false,
+            //             });
+            //             this.showNotification('Done', 'Signup successfully');
+            //         })
+            //         .catch((error) => {
+            //             this.setState({
+            //                 loadSignup: false,
+            //             });
+            //             this.showNotification('Error', error.message);
+            //             console.log(error);
+            //         });
+            //     })
+            //     .catch((error) => {
+            //         this.setState({
+            //             loadSignup: false,            
+            //         });
+            //         this.showNotification('Error', error.message);
+            //         console.log(error);
+            // });
 
         }
 
@@ -374,7 +394,7 @@ export default class Signup extends Component {
                                     style={styles.btnLogin}
                                     rippleContainerBorderRadius={Sizes.mainItemsRadius}
                                     rippleDuration={600}
-                                    onPress={() => this.userSignup()}
+                                    onPress={() => this.pressSignupBtn()}
                                 >
                                     <Text style={styles.btnText} >Sign up</Text>
                                 </Ripple>

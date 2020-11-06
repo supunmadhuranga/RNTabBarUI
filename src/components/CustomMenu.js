@@ -6,7 +6,10 @@ import { View, Text,Image, TouchableOpacity  } from 'react-native';
 import Menu, { MenuItem, MenuDivider } from './material-menu/index';
 //import menu and menu item
 
-import Entypo from 'react-native-vector-icons/Entypo';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Sizes from '../styles/sizes';
+import Colors from '../styles/colors';
+import Fonts from '../styles/fonts';
 
 export default class CustomMenuIcon extends Component {
     _menu = null;
@@ -42,11 +45,14 @@ export default class CustomMenuIcon extends Component {
                     ref={this.setMenuRef}
                     button={
                         <TouchableOpacity onPress={this.showMenu}>
-                            <Entypo name='dots-three-vertical' size={20} color={'#000000'} />
+                            <AntDesign name='bars' size={Sizes.wp('7%')} color={'#000000'} />
                         </TouchableOpacity>
                     }
                 >
-                <MenuItem onPress={this.option1Click}>Logout</MenuItem>
+                <MenuItem 
+                    onPress={this.option1Click}
+                    textStyle={{fontFamily:Fonts.main, fontSize:Sizes.wp('3.5%'),}}
+                >Logout</MenuItem>
                 {/* <MenuItem onPress={this.option2Click}>op2:Demo Option</MenuItem>
                 <MenuItem onPress={this.option3Click} disabled>
                     op3:Disabled option

@@ -19,7 +19,7 @@ import Fonts from '../../styles/fonts';
 import AppPreLoader from "../../components/AppPreLoader";
 import Ripple from '../../components/react-native-material-ripple/index';
 import BottomNotification from '../../components/BottomNotification';
-import SnackBar from '../../components/snackbar/index';
+import SnackBar from '../../components/rn-snackbar-component/index';
 
 //import Constants from 'expo-constants';
 import TopImage from '../../../assets/location.png';

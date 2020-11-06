@@ -1,7 +1,7 @@
 {
     "expo": {
-        "name": "TabBarUI",
-        "slug": "TabBarUI",
+        "name": "TravelSocialMedia",
+        "slug": "TravelSocialMedia",
         "version": "1.0.0",
         "orientation": "portrait",
         "icon": "./assets/icon.png",
@@ -21,9 +21,13 @@
             "**/*"
         ],
         "android": {
-            "package": "com.nexmatrixlab.travelmedia",
+            "package": "com.nexmatrixlab.travelsocialmedia",
             "versionCode": 6,
             "permissions": [
+                "Permissions.CAMERA",
+                "Permissions.CAMERA_ROLL",
+                "permissions.READ_INTERNAL_STORAGE",
+                "permissions.WRITE_EXTERNAL_STORAGE",
                 "Permissions.NOTIFICATIONS",
                 "Permissions.ACCESS_NETWORK_STATE",
                 "Permissions.ACCESS_COARSE_LOCATION",

@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { 
+    View, 
+    Text, 
+    ScrollView,
+    StyleSheet,
+    TouchableOpacity,
+} from 'react-native';
+import { withNavigation } from 'react-navigation';
 import Sizes from '../../styles/sizes';
 import Colors from '../../styles/colors';
 import Fonts from '../../styles/fonts';
 
+import {Entypo, EvilIcons, Feather, FontAwesome5, SimpleLineIcons, Ionicons, MaterialCommunityIcons, AntDesign} from 'react-native-vector-icons';
+
+import Ripple from '../../components/react-native-material-ripple/index';
 import HorizontalSwipeList from '../../components/HorizontalSwipeList';
 
 const ENTRIES1 = [
@@ -39,7 +49,7 @@ const ENTRIES1 = [
     }
 ];
 
-export default class Info extends Component {
+class Info extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -81,7 +91,70 @@ export default class Info extends Component {
                     </View>
                 </View>
 
+                {/* edit info btn */}
+                <View style={styles.editBtnWrapper}>
+                    <TouchableOpacity 
+                        //onPress={() => this.followFunction()}
+                        onPress={() => this.props.navigation.navigate("EditUserInfoScreen")}
+                        style={styles.touchableOpacityContentWrapper}>
+                        <Text style={styles.editBtnText}>Edit profile</Text>
+                    </TouchableOpacity>
+                </View>
+
+                {/* floating button */}
+                {/* <Ripple 
+                    style={styles.actionBtn}
+                    rippleContainerBorderRadius={400}
+                    rippleDuration={600}
+                    onPress={() => this.createVps()}
+                >
+                    <MaterialCommunityIcons name='cloud-upload-outline' size={Sizes.wp('7%')} color={Colors.white} />
+                </Ripple> */}
+
             </ScrollView>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    editBtnWrapper: {
+        flex:1, 
+        justifyContent:'center', 
+        alignItems:'center', 
+        height:Sizes.wp('12%'), 
+        marginLeft:Sizes.wp('10%'), 
+        marginRight:Sizes.wp('10%'), 
+        marginBottom:Sizes.wp('12%'), 
+        justifyContent:'space-between'
+    },
+    touchableOpacityContentWrapper: {
+        flexDirection:'row',
+        backgroundColor:'#e0e0e0', 
+        height:Sizes.wp('12%'), 
+        width:'100%', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        borderRadius:Sizes.mainItemsRadius,
+    },
+    editBtnText: {
+        fontSize:Sizes.wp('4%'), 
+        fontFamily:Fonts.mainMedium, 
+        color:Colors.black, 
+        padding:Sizes.wp('3%')
+    }
+    // actionBtn: {
+    //     backgroundColor:Colors.main,
+    //     alignItems: 'center',
+    //     justifyContent: 'center',
+    //     //borderRadius: 400,
+    //     position: 'absolute',
+    //     width:Sizes.wp('17%'),
+    //     height:Sizes.wp('17%'),
+    //     borderRadius:Sizes.wp('17%')/2,
+    //     right:Sizes.wp('5%'),
+    //     bottom:Sizes.wp('6%'),
+    // },
+    
+});
+
+export default withNavigation(Info);

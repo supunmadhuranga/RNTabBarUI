@@ -2,17 +2,24 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-//import {FontAwesome5, MaterialCommunityIcons} from 'react-native-vector-icons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Entypo from 'react-native-vector-icons/Entypo';
+import {Feather, MaterialIcons, Entypo, FontAwesome, FontAwesome5, SimpleLineIcons, Ionicons, MaterialCommunityIcons, AntDesign} from 'react-native-vector-icons';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
+import Sizes from '../styles/sizes';
+import Colors from '../styles/colors';
+import Fonts from '../styles/fonts';
 
 import { createStackNavigator, TransitionPresets, HeaderBackButton } from 'react-navigation-stack';
 
 import HomeScreen from '../screens/Home';
 import MapScreen from '../screens/Map';
 import UserScreen from '../screens/User';
+
+//import selectPhotoScreen from '../utils/selectPhoto_old';
+import SelectNewPost from '../utils/NewPost';
+import CreateNewEvent from '../utils/event/Index';
+import UserPosts from '../screens/UserPosts/Posts';
+import EditUserInfo from '../screens/UserInfo/EditAction';
 
 /* bottom tab screens set*/
 const ScreenHome = createStackNavigator ({
@@ -23,10 +30,45 @@ const ScreenMap = createStackNavigator ({
     screen: MapScreen,
 });
 
-const ScreenUser = createStackNavigator ({
-    screen: UserScreen,
-});
+// const ScreenUser = createStackNavigator ({
+//     screen: UserScreen,
+// });
 
+const ScreenUser = createStackNavigator (
+    {
+        UserScreen: {
+            screen: UserScreen,
+        },
+        NewPostScreen: {
+            screen: SelectNewPost
+        },
+        NewEventScreen: {
+            screen: CreateNewEvent,
+            navigationOptions: ({ navigation }) => ({
+                //...TransitionPresets.SlideFromRightIOS,
+                headerShown:false,
+            }),
+            
+        },
+        UserPostsScreen: {
+            screen: UserPosts,
+            // navigationOptions: ({ navigation }) => ({
+            //     ...TransitionPresets.SlideFromRightIOS,
+            // }),
+        },
+        EditUserInfoScreen: {
+            screen: EditUserInfo,
+            // navigationOptions: ({ navigation }) => ({
+            //     ...TransitionPresets.SlideFromRightIOS,
+            // }),
+        },
+    },
+    {
+        initialRouteName: 'UserScreen',
+        //headerLayoutPreset: "center",
+        //headerMode: 'none'
+    }
+);
 
 const bottomTabNavigator = createBottomTabNavigator(
     {   
@@ -34,7 +76,7 @@ const bottomTabNavigator = createBottomTabNavigator(
             screen: ScreenHome,
             navigationOptions: {
                 tabBarIcon: ({ tintColor }) => (
-                    <Entypo name="home" size={wp('5%')} color={tintColor} />
+                    <Feather name="home" size={wp('6.5%')} color={tintColor} />
                 )
             }
         },
@@ -42,7 +84,7 @@ const bottomTabNavigator = createBottomTabNavigator(
             screen: ScreenMap,
             navigationOptions: {
                 tabBarIcon: ({ tintColor }) => (
-                    <MaterialCommunityIcons name="map-marker" size={wp('5%')} color={tintColor} />
+                    <Feather name="map-pin" size={wp('6.5%')} color={tintColor} />
                 )
             }
         },
@@ -50,7 +92,7 @@ const bottomTabNavigator = createBottomTabNavigator(
             screen: ScreenUser,
             navigationOptions: {
                 tabBarIcon: ({ tintColor }) => (
-                    <FontAwesome5 name="user" size={wp('5%')} color={tintColor} />
+                    <Feather name="user" size={wp('6.5%')} color={tintColor} />
                 )
             }
         },
@@ -59,7 +101,9 @@ const bottomTabNavigator = createBottomTabNavigator(
         initialRouteName: 'Home',
         lazy: true,
         tabBarOptions: {
-            activeTintColor: '#eb6e3d',
+            //activeTintColor: '#eb6e3d',
+            activeTintColor: Colors.main,
+            //inactiveTintColor: '#539849',
             showLabel:false,
         }
     }
