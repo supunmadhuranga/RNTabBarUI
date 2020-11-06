@@ -1,6 +1,8 @@
 import * as firebase from 'firebase';
 
-export const userSignUp = async(email, password) => {
+export const userSignUp = async(name, email, username, password) => {
+    
+    let timestamp = Date.now();
 
     return firebase
             .auth()
@@ -8,17 +10,22 @@ export const userSignUp = async(email, password) => {
             .then((response) => {
                 const data = {
                     id: response.user.uid,
-                    name: this.state.name,
-                    email: this.state.email,
-                    username: this.state.username,
+                    name: name,
+                    email: email,
+                    username: username,
+                    age: '',
+                    sex: '',
                     image: '',
+                    bio: '',
                     followed_count: 0,
                     follower_count: 0,
                     post_count: 0,
-                    active:1,
+                    active: 1,
+                    date_created: timestamp,
+                    date_updated: timestamp,
                 };
                 const usersRef = firebase.firestore().collection('users');
-                usersRef
+                return usersRef
                 .doc(response.user.uid)
                 .set(data)
                 .then(() => {

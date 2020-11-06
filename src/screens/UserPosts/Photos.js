@@ -16,7 +16,7 @@ import * as ImagePicker from 'expo-image-picker';
 import Sizes from '../../styles/sizes';
 import Colors from '../../styles/colors';
 import Fonts from '../../styles/fonts';
-import {FontAwesome5, SimpleLineIcons, Ionicons, MaterialCommunityIcons, AntDesign} from 'react-native-vector-icons';
+import {Feather, SimpleLineIcons, Ionicons, MaterialCommunityIcons, AntDesign} from 'react-native-vector-icons';
 
 import * as ApiMethods from "../../config/Api";
 
@@ -118,26 +118,44 @@ class Photos extends Component {
     }
 
     render() {
-        return (
-            <View style={styles.images}>
-                {/* <View style={{}}>
-                    <TouchableOpacity 
-                        onPress={() => alert('add functionality to open')}
-                        style={{width: this.state.itemSize, height: this.state.itemSize, justifyContent:'center', alignItems:'center'}}
-                    >
-                        
-                        <SimpleLineIcons name={"plus"} size={Sizes.wp('15%')} style={{ }} color={"#555555"} />
-                        <Text style={{fontFamily:Fonts.mainMedium, fontSize:Sizes.wp('3.5%'), marginBottom:Sizes.wp('1%'), marginTop:Sizes.wp('1%'), color:"#555555" }}>New</Text>
-                    </TouchableOpacity>
-                </View> */}
-                <FlatList
-                    data={this.state.galleryData}
-                    numColumns={3}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={this.renderItem}
-                />
-            </View>
-        )
+
+        if (this.state.galleryData == null || this.state.galleryData.length == 0){
+            return (
+                <View style={{flex:1, alignItems:'center', marginTop:Sizes.wp('10%')}}>
+                    <Feather 
+                        name='camera' 
+                        size={Sizes.wp('20%')} 
+                        color={Colors.thirdFontColor}
+                        style={{marginBottom: Sizes.hp('2.5%')}}
+                    />
+
+                    <View style={{marginLeft:Sizes.wp('2%'), marginRight:Sizes.wp('2%'), alignItems:'center', justifyContent: 'center',}}>
+                        <Text style={{fontFamily:Fonts.main, fontSize:Sizes.wp('4.5%'), color:Colors.thirdFontColor}}>No Posts Yet</Text>
+                    </View>
+                </View>
+            );
+        } else {
+            return (
+                <View style={styles.images}>
+                    {/* <View style={{}}>
+                        <TouchableOpacity 
+                            onPress={() => alert('add functionality to open')}
+                            style={{width: this.state.itemSize, height: this.state.itemSize, justifyContent:'center', alignItems:'center'}}
+                        >
+                            
+                            <SimpleLineIcons name={"plus"} size={Sizes.wp('15%')} style={{ }} color={"#555555"} />
+                            <Text style={{fontFamily:Fonts.mainMedium, fontSize:Sizes.wp('3.5%'), marginBottom:Sizes.wp('1%'), marginTop:Sizes.wp('1%'), color:"#555555" }}>New</Text>
+                        </TouchableOpacity>
+                    </View> */}
+                    <FlatList
+                        data={this.state.galleryData}
+                        numColumns={3}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={this.renderItem}
+                    />
+                </View>
+            );
+        }
     }
 
     // render() {
@@ -195,6 +213,14 @@ const styles = StyleSheet.create({
         flex:1,
         flexDirection: 'row',
         paddingHorizontal: 0.5,
+    },
+    emptyListText: {
+        //justifyContent: 'center',
+        //textAlign: 'center',
+        fontFamily:Fonts.main,
+        fontSize: Sizes.wp('3.5%'),
+        //color: '#85929E',
+        color:'#CCC5B9',
     },
     header: {
       flexDirection: 'row',

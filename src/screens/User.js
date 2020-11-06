@@ -19,7 +19,7 @@ import Sizes from '../styles/sizes';
 import Colors from '../styles/colors';
 import Fonts from '../styles/fonts';
 
-import { TabView, SceneMap } from 'react-native-tab-view';
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Feather from 'react-native-vector-icons/Feather';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Dialog, { DialogFooter, DialogButton, DialogTitle, SlideAnimation, ScaleAnimation, DialogContent } from 'react-native-popup-dialog';
@@ -212,31 +212,32 @@ export default class User extends Component {
     /* middle tab bar render */
     _renderTabBar = props => {
         const inputRange = props.navigationState.routes.map((x, i) => i);
-    
         return (
             <View style={styles.tabBar}>
-            {props.navigationState.routes.map((route, i) => {
-                const color = Animated.color(
-                    Animated.round(
-                        Animated.interpolate(props.position, {
-                            inputRange,
-                            outputRange: inputRange.map(inputIndex =>
-                            inputIndex === i ? 255 : 0
-                            ),
-                        })
-                    ),0,0
-                );
-    
-                return (
-                    <TouchableOpacity
-                        key={i}
-                        style={styles.tabItem}
-                        onPress={() => this.setState({ index: i })}
-                    >
-                        <Animated.Text style={{ color, fontFamily:Fonts.mainMedium, fontSize:Sizes.wp('3.5%') }}>{route.title}</Animated.Text>
-                    </TouchableOpacity>
-                );
-            })}
+                {props.navigationState.routes.map((route, i) => {
+                    const color = Animated.color(
+                        Animated.round(
+                            Animated.interpolate(props.position, {
+                                inputRange,
+                                outputRange: inputRange.map(inputIndex =>
+                                inputIndex === i ? 255 : 0
+                                ),
+                            })
+                        ),0,0
+                    );
+        
+                    return (
+                        <>
+                        <TouchableOpacity
+                            key={i}
+                            style={styles.tabItem}
+                            onPress={() => this.setState({ index: i })}
+                        >
+                            <Animated.Text style={{ color, fontFamily:Fonts.mainMedium, fontSize:Sizes.wp('3.5%') }}>{route.title}</Animated.Text>
+                        </TouchableOpacity>
+                        </>
+                    );
+                })}
             </View>
         );
     };
@@ -246,6 +247,18 @@ export default class User extends Component {
         second: EventsScreen,
         third: InfoScreen,
     });
+
+    /* tab bar */
+    _renderTabBar = props => (
+        <TabBar
+            {...props}
+            indicatorStyle={{ backgroundColor:Colors.main }}
+            style={{ backgroundColor:Colors.white, elevation: 0, shadowOpacity: 0}}
+            labelStyle={{fontFamily:Fonts.mainMedium, fontSize:Sizes.wp('3.75%')}}
+            activeColor={Colors.main}
+            inactiveColor={Colors.secondFontColor}
+        />
+    );
 
     /* tab change handler end */
 
@@ -641,7 +654,7 @@ export default class User extends Component {
                         
 
                         {/* user image and name*/}
-                        <View style={{ alignItems:'center', marginLeft:Sizes.wp('10%'), marginRight:Sizes.wp('10%'), marginBottom:Sizes.wp('8%')}}>
+                        <View style={{ alignItems:'center', marginLeft:Sizes.wp('10%'), marginRight:Sizes.wp('10%'), marginTop:Sizes.wp('4%'), marginBottom:Sizes.wp('8%')}}>
                             <TouchableOpacity 
                                 style={{ height:Sizes.wp('20%'), width:Sizes.wp('20%'),}}
                                 onPress={() => this.pickProfileImage()}
@@ -720,12 +733,13 @@ export default class User extends Component {
                         {/* tab navigator */}
                         <View style={{flex:1}}>
                             <TabView
+                                //lazy={true}
                                 navigationState={this.state}
                                 renderScene={this._renderScene}
                                 renderTabBar={this._renderTabBar}
                                 onIndexChange={this._handleIndexChange}
-                                initialLayout={{ width:Sizes.deviceWidth }}
-                                //sceneContainerStyle={{backgroundColor:'yellow', flexWrap:'wrap'}}
+                                initialLayout={{ height: 0, width:Sizes.deviceWidth }}
+                                //sceneContainerStyle={{backgroundColor:Colors.main, hight:0}}
                             />
                         </View>
                         

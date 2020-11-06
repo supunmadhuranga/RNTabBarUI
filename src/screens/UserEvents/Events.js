@@ -16,7 +16,7 @@ import * as ImagePicker from 'expo-image-picker';
 import Sizes from '../../styles/sizes';
 import Colors from '../../styles/colors';
 import Fonts from '../../styles/fonts';
-import {EvilIcons, Entypo, FontAwesome5, SimpleLineIcons, Ionicons, MaterialCommunityIcons, AntDesign} from 'react-native-vector-icons';
+import {EvilIcons, Entypo, Feather, SimpleLineIcons, Ionicons, MaterialCommunityIcons, AntDesign} from 'react-native-vector-icons';
 
 import * as ApiMethods from "../../config/Api";
 
@@ -128,16 +128,33 @@ class Events extends Component {
     }
 
     render() {
-        return (
-            <View style={styles.container}>
-                <FlatList
-                    data={this.state.eventList}
-                    //numColumns={3}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={this.renderItem}
-                />
-            </View>
-        )
+        if (this.state.eventList == null || this.state.eventList.length == 0){
+            return (
+                <View style={{flex:1, alignItems:'center', marginTop:Sizes.wp('10%')}}>
+                    <Feather 
+                        name='calendar' 
+                        size={Sizes.wp('20%')} 
+                        color={Colors.thirdFontColor}
+                        style={{marginBottom: Sizes.hp('2.5%')}}
+                    />
+
+                    <View style={{marginLeft:Sizes.wp('2%'), marginRight:Sizes.wp('2%'), alignItems:'center', justifyContent: 'center',}}>
+                        <Text style={{fontFamily:Fonts.main, fontSize:Sizes.wp('4.5%'), color:Colors.thirdFontColor}}>No Any Events</Text>
+                    </View>
+                </View>
+            );
+        } else {
+            return (
+                <View style={styles.container}>
+                    <FlatList
+                        data={this.state.eventList}
+                        //numColumns={3}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={this.renderItem}
+                    />
+                </View>
+            );
+        }
     }
 
     
@@ -147,6 +164,14 @@ const styles = StyleSheet.create({
     container: {
         marginLeft:Sizes.wp('3%'),
         marginRight:Sizes.wp('3%')
+    },
+    emptyListText: {
+        //justifyContent: 'center',
+        //textAlign: 'center',
+        fontFamily:Fonts.main,
+        fontSize: Sizes.wp('3.5%'),
+        //color: '#85929E',
+        color:'#CCC5B9',
     },
     listWrapper: {
         //height:(Sizes.wp('100%') - Sizes.wp('20%'))  / 3,

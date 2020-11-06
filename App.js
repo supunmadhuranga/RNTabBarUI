@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import * as firebase from 'firebase';
 import firebaseApi from './src/config/firebase';
+import * as Permissions from './src/utils/Permissions';
 
 //import LoadFirebase from './src/config/firebase';
 import * as Font from 'expo-font';
@@ -41,7 +42,9 @@ export default class App extends React.Component {
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseApi.firebaseConfig);
         }
-        
+
+        /* check app permissions */
+        Permissions.getCameraPermission();
 
     }
 
