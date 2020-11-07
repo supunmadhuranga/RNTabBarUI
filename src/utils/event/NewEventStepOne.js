@@ -929,7 +929,6 @@ const styles = StyleSheet.create({
         color:Colors.white,
         paddingBottom:Sizes.wp('6%'),
         paddingTop:Sizes.wp('6%'),
-        
     },
     
 

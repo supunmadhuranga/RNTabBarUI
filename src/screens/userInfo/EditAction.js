@@ -16,8 +16,11 @@ import RNPickerSelect from 'react-native-picker-select';
 import Sizes from '../../styles/sizes';
 import Colors from '../../styles/colors';
 import Fonts from '../../styles/fonts';
+import CommonStyles from '../../styles/CommonStyles';
 import userImage from '../../../assets/user.png';
 
+import SnackBar from '../../components/rn-snackbar-component/index';
+import AppPreLoader from "../../components/AppPreLoader";
 import * as ApiMethods from "../../config/Api";
 
 const URI = 'https://i.picsum.photos/id/176/200/300.jpg?hmac=FVhRySTQhcAO5Xvxk6nE-bMsJSyIAW8Uw6zWgAh9hzY';
@@ -27,6 +30,9 @@ export default class editAction extends Component {
         super(props);
         this._isMounted = false;
         this.state = {
+            isConnected: true,
+            isLoading: true,
+            spinner:false,
             user_name:'',
             user_image:null,
             user_age:'',
@@ -74,13 +80,15 @@ export default class editAction extends Component {
 
         /*set navigation header function*/
         this.props.navigation.setParams({
-            _saveData: this.saveData
+            _saveData: this.updateData
         });
         //this._isMounted && this.getUserData();
 
         this._isMounted && this.setState({
             userImage: URI,
         });
+
+        this._isMounted && this.getUserData();
     }
 
     componentWillUnmount() {
@@ -117,7 +125,7 @@ export default class editAction extends Component {
                     user_name:  response.name,
                     user_image: response.image,
                     user_age: response.age,
-                    user_sex: response.sex,
+                    user_sex: response.sex == "" ? 'male' :response.sex,
                     user_bio: response.bio,
                     isLoading: false,
                 });
@@ -130,21 +138,32 @@ export default class editAction extends Component {
         });
     }
 
-    saveData = async() => {
-        
-        // if (this.state.imageUri != null && this.state.imageUri != false && this.state.imageUri != 'undifined') {
-            
-        //     this._isMounted && this.setState({
-        //         spinner: true,
-        //     });
+    updateData = async() => {
 
-        //     let result = await ApiMethods.addPost(this.state.caption, this.state.imageUri);
-        //     this.navigateScreen(result);
+        this._isMounted && this.setState({
+            spinner: true,
+        });
 
-        // } else {
-        //     console.log("error upload post");
-        // }
+        let field = {
+            name:this.state.user_name,
+            age:this.state.user_age,
+            sex:this.state.user_sex,
+            bio:this.state.user_bio,
+        };
 
+        ApiMethods.updateData('users', field).then( async(response) => {
+            if (response) {
+                this._isMounted && this.setState({
+                    spinner: false,
+                });
+                this.showSnackbar('User details updated successfully');
+            } else {
+                this._isMounted && this.setState({
+                    spinner: false,
+                });
+                this.showSnackbar('User details update failed');
+            }
+        });
     }
 
     setName = (value) => {
@@ -175,143 +194,172 @@ export default class editAction extends Component {
     }
 
     render() {
-        return (
-            <View style={styles.container}>
-                
-                <ScrollView scrollEnabled={true} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'handled'} contentContainerStyle={{ flexGrow: 1}} >
-                    <Spinner
-                        color={Colors.main}
-                        visible={this.state.spinner}
-                        textContent={'Please wait...'}
-                        overlayColor={'rgba(255, 255, 255, 0.9)'}
-                        textStyle={{color:Colors.main, fontSize:Sizes.wp('3.75%')}}
-                    />
+        if (!this.state.isLoading) {
+            return (
+                <View style={styles.container}>
+                    
+                    <ScrollView 
+                        scrollEnabled={true} 
+                        showsVerticalScrollIndicator={false} 
+                        keyboardShouldPersistTaps={'handled'} 
+                        contentContainerStyle={{ flexGrow: 1}} 
+                    >
+                        <Spinner
+                            color={Colors.main}
+                            visible={this.state.spinner}
+                            textContent={'Please wait...'}
+                            overlayColor={'rgba(255, 255, 255, 0.9)'}
+                            textStyle={{color:Colors.main, fontSize:Sizes.wp('3.75%')}}
+                        />
 
-                    <View style={styles.mainWrapper}>
+                        <View style={styles.mainWrapper}>
 
-                        {/* user image */}
-                        <View style={styles.userImageWrapper}>
-                            <TouchableOpacity 
-                                style={styles.touchableWrapper}
-                                onPress={() => this.pickProfileImage()}
-                            >   
-                                {this.state.user_image == "" || this.state.user_image == null ?
-                                    <Image
-                                        source={userImage}
-                                        style={styles.userImage}
-                                    />
-                                :
-                                    <Image
-                                        source={{uri:this.state.user_image}}
-                                        style={styles.userImage}
-                                    />
-                                }
-                            </TouchableOpacity>
-                            <Text style={styles.userImageChangeText}>Change Profile Pic</Text>
-                        </View>
-                        
-                        {/* name */}
-                        <View style={styles.nameWrapper}>
-                            <Text style={styles.lablesAll}>Name</Text>
-                            <TextInput
-                                style={[styles.nameTextInputWrapper, styles.lablesWithTextAll]}
-                                autoCapitalize = 'none'
-                                placeholder={'Name'}
-                                //keyboardType="email-address"
-                                placeholderTextColor='#CCC5B9'
-                                underlineColorAndroid='transparent'
-                                onChangeText={(name) => this.setName(name)}
-                                onFocus={this.onFocusChange}
-                                onBlur={this.onBlurChange}
-                            />
-                        </View>
-
-                        {/* age and sex */}
-                        <View style={styles.twoItemWrapper}>
-                            <View style={styles.twoItemLeftWrapper}>
-                                <Text style={styles.lablesAll}>Age</Text>
+                            {/* user image */}
+                            <View style={styles.userImageWrapper}>
+                                <TouchableOpacity 
+                                    style={styles.touchableWrapper}
+                                    onPress={() => this.pickProfileImage()}
+                                >   
+                                    {this.state.user_image == "" || this.state.user_image == null ?
+                                        <Image
+                                            source={userImage}
+                                            style={styles.userImage}
+                                        />
+                                    :
+                                        <Image
+                                            source={{uri:this.state.user_image}}
+                                            style={styles.userImage}
+                                        />
+                                    }
+                                </TouchableOpacity>
+                                <Text style={styles.userImageChangeText}>Change Profile Pic</Text>
+                            </View>
+                            
+                            {/* name */}
+                            <View style={styles.nameWrapper}>
+                                <Text style={styles.lablesAll}>Name</Text>
                                 <TextInput
                                     style={[styles.nameTextInputWrapper, styles.lablesWithTextAll]}
                                     autoCapitalize = 'none'
-                                    placeholder={'Age'}
+                                    placeholder={'Name'}
                                     //keyboardType="email-address"
                                     placeholderTextColor='#CCC5B9'
                                     underlineColorAndroid='transparent'
-                                    onChangeText={(age) => this.setAge(age)}
+                                    value={this.state.user_name}
+                                    onChangeText={(name) => this.setName(name)}
                                     onFocus={this.onFocusChange}
                                     onBlur={this.onBlurChange}
                                 />
                             </View>
-                            <View style={styles.twoItemRightWrapper}>
-                                <Text style={styles.lablesAll}>Sex</Text>
-                                <TouchableHighlight 
-                                    //onPress={() => {this.setTitle()}}
-                                    underlayColor={'#e0dbdb'}
-                                    style={[styles.twoItemTextWrapper, {paddingTop:Sizes.wp('4%'), paddingBottom:Sizes.wp('4%')}]}
-                                >
 
-                                    {/* <Text style={styles.lablesWithTextAll}>Return hour</Text> */}
-                                    <RNPickerSelect
-                                        onValueChange={(value) => this.setSexType(value)}
-                                        value={this.state.event_type}
-                                        items={[
-                                            { label: 'Male', value: 'male' },
-                                            { label: 'Female', value: 'female' },
-                                        ]}
-                                        useNativeAndroidPickerStyle={false}
-                                        style={{
-                                            placeholder: {
-                                                
-                                            },
-                                            headlessAndroidContainer: {
-                                                
-                                            },
-                                            viewContainer: {
-                                                
-                                            },
-                                            inputAndroidContainer: {
-                                                
-                                            },
-                                            inputAndroid:{
-                                                fontFamily:Fonts.mainMedium,
-                                                fontSize:Sizes.wp('4%'),
-                                                paddingLeft:Sizes.wp('4%'),
-                                            },
-                                            iconContainer:{
-                                                backgroundColor:'yellow',
-                                                padding:Sizes.wp('4%'),
-                                            },
-                                            
-                                            
-                                        }}
+                            {/* age and sex */}
+                            <View style={styles.twoItemWrapper}>
+                                <View style={styles.twoItemLeftWrapper}>
+                                    <Text style={styles.lablesAll}>Age</Text>
+                                    <TextInput
+                                        style={[styles.nameTextInputWrapper, styles.lablesWithTextAll]}
+                                        autoCapitalize = 'none'
+                                        placeholder={'Age'}
+                                        //keyboardType="email-address"
+                                        placeholderTextColor='#CCC5B9'
+                                        underlineColorAndroid='transparent'
+                                        value={this.state.user_age}
+                                        onChangeText={(age) => this.setAge(age)}
+                                        onFocus={this.onFocusChange}
+                                        onBlur={this.onBlurChange}
                                     />
-                                    
-                                </TouchableHighlight>
+                                </View>
+                                <View style={styles.twoItemRightWrapper}>
+                                    <Text style={styles.lablesAll}>Sex</Text>
+                                    <TouchableHighlight 
+                                        //onPress={() => {this.setTitle()}}
+                                        underlayColor={'#e0dbdb'}
+                                        style={[styles.twoItemTextWrapper, {paddingTop:Sizes.wp('4%'), paddingBottom:Sizes.wp('4%')}]}
+                                    >
+
+                                        {/* <Text style={styles.lablesWithTextAll}>Return hour</Text> */}
+                                        <RNPickerSelect
+                                            onValueChange={(value) => this.setSexType(value)}
+                                            value={this.state.user_sex}
+                                            items={[
+                                                { label: 'Male', value: 'male' },
+                                                { label: 'Female', value: 'female' },
+                                            ]}
+                                            useNativeAndroidPickerStyle={false}
+                                            style={{
+                                                placeholder: {
+                                                    
+                                                },
+                                                headlessAndroidContainer: {
+                                                    
+                                                },
+                                                viewContainer: {
+                                                    
+                                                },
+                                                inputAndroidContainer: {
+                                                    
+                                                },
+                                                inputAndroid:{
+                                                    fontFamily:Fonts.mainMedium,
+                                                    fontSize:Sizes.wp('4%'),
+                                                    paddingLeft:Sizes.wp('4%'),
+                                                },
+                                                iconContainer:{
+                                                    backgroundColor:'yellow',
+                                                    padding:Sizes.wp('4%'),
+                                                },
+                                                
+                                                
+                                            }}
+                                        />
+                                        
+                                    </TouchableHighlight>
+                                </View>
                             </View>
+
+                            {/* bio */}
+                            <View style={styles.nameWrapper}>
+                                <Text style={styles.lablesAll}>Bio</Text>
+                                <TextInput
+                                    style={[styles.nameTextInputWrapper, styles.lablesWithTextAll, {textAlignVertical:'top',}]}
+                                    autoCapitalize = 'none'
+                                    placeholder={'Bio'}
+                                    numberOfLines={5}
+                                    multiline={true}
+                                    //keyboardType="email-address"
+                                    placeholderTextColor='#CCC5B9'
+                                    underlineColorAndroid='transparent'
+                                    value={this.state.user_bio}
+                                    onChangeText={(value) => this.setUserBio(value)}
+                                    onFocus={this.onFocusChange}
+                                    onBlur={this.onBlurChange}
+                                />
+                            </View>
+                        
                         </View>
 
-                        {/* bio */}
-                        <View style={styles.nameWrapper}>
-                            <Text style={styles.lablesAll}>Bio</Text>
-                            <TextInput
-                                style={[styles.nameTextInputWrapper, styles.lablesWithTextAll, {textAlignVertical:'top',}]}
-                                autoCapitalize = 'none'
-                                placeholder={'Bio'}
-                                numberOfLines={5}
-                                multiline={true}
-                                //keyboardType="email-address"
-                                placeholderTextColor='#CCC5B9'
-                                underlineColorAndroid='transparent'
-                                onChangeText={(value) => this.setUserBio(value)}
-                                onFocus={this.onFocusChange}
-                                onBlur={this.onBlurChange}
-                            />
-                        </View>
-                    
-                    </View>
-                </ScrollView>
-            </View>
-        );
+                        <SnackBar
+                            visible={this.state.snackbarVisible}
+                            message={this.state.snackbarMessage}
+                            actionHandler={() => {
+                                console.log("snackbar button clicked!")
+                            }}
+                            action=""
+                            messageStyle={CommonStyles.snackbarMessage}
+                            //autoHidingTime={300}
+                        />
+                    </ScrollView>
+                </View>
+            );
+        } else {
+            return (
+                <AppPreLoader 
+                    color={Colors.main}
+                    size={Sizes.wp('10%')}
+                    background={false}
+                />
+            );
+        }
     }
 }
 

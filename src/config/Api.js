@@ -327,3 +327,20 @@ export const fetchData = async(collection_name) => {
         return error;
       })
 }
+
+export const updateData = async(collection_name, field_set) => {
+    let user = firebase.auth().currentUser;
+    return firebase
+      .firestore()
+      .collection(collection_name)
+      .doc(user.uid)
+      .update(field_set)
+      .then((res) => {
+        console.log(res);
+        return true;
+      })
+      .catch((error) => {
+        console.log('Error getting documents: ', error)
+        return error;
+      })
+}
